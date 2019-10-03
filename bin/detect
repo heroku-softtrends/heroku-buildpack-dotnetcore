@@ -11,10 +11,10 @@ else
 		The ASP.NET Core buildpack is set on this application, but was
 		unable to detect a ASP.NET Core codebase.
 		
-		An ASP.NET Core app on Heroku requires a 'startup.cs' at the root of
+		An ASP.NET Core app on Heroku requires a 'Startup.cs' at the root of
 		the directory structure.
 		
-		If you are trying to deploy a ASP.NET Core application, ensure that 'startup.cs' is present at the top level directory.
+		If you are trying to deploy a ASP.NET Core application, ensure that 'Startup.cs' is present at the top level directory.
 		
 		If you are trying to deploy an application written in another
 		language, you need to change the list of buildpacks set on your
