@@ -2,29 +2,31 @@
 # convenience functions
 source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
-if [[ -f $1/*.csproj && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
+PROJECT_NAME="$(getprojectname $1)"
+echo "The projecct: ${PROJECT_NAME}"
+if [[ -f $1/{PROJECT_NAME}.csproj && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
 fi
 
-REQUIRED_FILES=""
-if [[ ! -f $1/*.csproj ]]; then
-	REQUIRED_FILES+="*.csproj"
+local required_files=""
+if [[ ! -f $1/{PROJECT_NAME}.csproj ]]; then
+	required_files+="${projectname}.csproj"
 fi
 if [[ ! -e "$1/Startup.cs" ]]; then
  	echo "Startup not found"
-	if [[ ${#REQUIRED_FILES} == 0 ]]; then
+	if [[ ${#required_files} == 0 ]]; then
 		echo "Startup1"
-		REQUIRED_FILES+="Startup.cs"
+		required_files+="Startup.cs"
 	else
 		echo "Startup1"
-		REQUIRED_FILES+=", Startup.cs"
+		required_files+=", Startup.cs"
 	fi
 fi
 if [[ ! -e "$1/Program.cs" ]]; then
-	if [[ ${#REQUIRED_FILES} == 0 ]]; then
-		REQUIRED_FILES+="Program.cs"
+	if [[ ${#required_files} == 0 ]]; then
+		required_files+="Program.cs"
 	else
-		REQUIRED_FILES+=", Program.cs"
+		required_files+=", Program.cs"
 	fi
 fi
 
@@ -34,11 +36,11 @@ error <<-EOF
 	The ASP.NET Core buildpack is set on this application, but was
 	unable to detect an ASP.NET Core codebase.
 
-	An ASP.NET Core app requires ${REQUIRED_FILES} file(s) at the root of
+	An ASP.NET Core app requires ${required_files} file(s) at the root of
 	the directory structure.
 
 	If you are trying to deploy an ASP.NET Core application, ensure that ensure that these files
-	(*.csproj, Startup.cs and Program.cs) are present at the top level directory. 
+	(${PROJECT_NAME}.csproj, Startup.cs and Program.cs) are present at the top level directory. 
 	
 	This directory has the following files:
 	$(ls -1p "$1")
