@@ -6,51 +6,30 @@ PROJECT_NAME="$(getprojectname $1)"
 echo "The projecct: ${PROJECT_NAME}"
 if [[ -f $1/{PROJECT_NAME}.csproj && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
+else
+	error <<-EOF
+		Application not supported by this buildpack!
+
+		The ASP.NET Core buildpack is set on this application, but was unable to detect
+		an ASP.NET Core codebase.
+
+		An ASP.NET Core app requires ${PROJECT_NAME}.csproj, Startup.cs and Program.cs
+		files at the root of the directory structure.
+
+		If you are trying to deploy an ASP.NET Core application, ensure that ensure that
+		these files (${PROJECT_NAME}.csproj, Startup.cs and Program.cs) are present at
+		the top level directory. 
+
+		This directory has the following files:
+		$(ls -1p "$1")
+
+		If you are trying to deploy an application written in another language, you need
+		to change the list of buildpacks set on your Heroku app using the 'heroku buildpacks'
+		command.
+
+		For more information, refer to the following documentation:
+		https://devcenter.heroku.com/articles/buildpacks
+		https://devcenter.heroku.com/articles/php-support#activation
+	EOF
 fi
-
-local required_files=""
-if [[ ! -f $1/{PROJECT_NAME}.csproj ]]; then
-	required_files+="${projectname}.csproj"
-fi
-if [[ ! -e "$1/Startup.cs" ]]; then
- 	echo "Startup not found"
-	if [[ ${#required_files} == 0 ]]; then
-		echo "Startup1"
-		required_files+="Startup.cs"
-	else
-		echo "Startup1"
-		required_files+=", Startup.cs"
-	fi
-fi
-if [[ ! -e "$1/Program.cs" ]]; then
-	if [[ ${#required_files} == 0 ]]; then
-		required_files+="Program.cs"
-	else
-		required_files+=", Program.cs"
-	fi
-fi
-
-error <<-EOF
-	Application not supported by this buildpack!
-
-	The ASP.NET Core buildpack is set on this application, but was
-	unable to detect an ASP.NET Core codebase.
-
-	An ASP.NET Core app requires ${required_files} file(s) at the root of
-	the directory structure.
-
-	If you are trying to deploy an ASP.NET Core application, ensure that ensure that these files
-	(${PROJECT_NAME}.csproj, Startup.cs and Program.cs) are present at the top level directory. 
-	
-	This directory has the following files:
-	$(ls -1p "$1")
-	
-	If you are trying to deploy an application written in another
-	language, you need to change the list of buildpacks set on your
-	Heroku app using the 'heroku buildpacks' command.
-
-	For more information, refer to the following documentation:
-	https://devcenter.heroku.com/articles/buildpacks
-	https://devcenter.heroku.com/articles/php-support#activation
-EOF
 exit 1
