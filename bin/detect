@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# bin/detect <build-dir>
+# convenience functions
+source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
 if [ -n "$( find $1 -maxdepth 3 -iname startup.cs )" ]; then
   echo "ASP.NET Core" && exit 0
