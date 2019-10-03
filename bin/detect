@@ -2,7 +2,25 @@
 # bin/detect <build-dir>
 
 if [ -n "$( find $1 -maxdepth 3 -iname startup.cs )" ]; then
-  echo "ASP.NET 5" && exit 0
+  echo "ASP.NET Core" && exit 0
 else
-  echo "no" && exit 1
+  error <<-EOF
+		Application not supported by this buildpack!
+		
+		The ASP.NET Core buildpack is set on this application, but was
+		unable to detect a ASP.NET Core codebase.
+		
+		An ASP.NET Core app on Heroku requires a 'startup.cs' at the root of
+		the directory structure.
+		
+		If you are trying to deploy a ASP.NET Core application, ensure that 'startup.cs' is present at the top level directory.
+		
+		If you are trying to deploy an application written in another
+		language, you need to change the list of buildpacks set on your
+		Heroku app using the 'heroku buildpacks' command.
+		
+		For more information, refer to the following documentation:
+		https://devcenter.heroku.com/articles/buildpacks
+		https://devcenter.heroku.com/articles/php-support#activation
+	EOF
 fi
