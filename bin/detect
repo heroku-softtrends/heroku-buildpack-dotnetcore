@@ -6,6 +6,9 @@ PROJECT_NAME="$(getprojectname $1)"
 if [[ -f "$1/${PROJECT_NAME}.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
 else
+	if [[ ${#PROJECT_NAME} -eq 0 ]]; then
+		PROJECT_NAME="*"
+	fi
 	error <<-EOF
 		Application not supported by this buildpack!
 
