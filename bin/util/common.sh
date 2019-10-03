@@ -19,7 +19,7 @@ getprojectname() {
 	if [[ $projectfile ]]; then
 		projectname=$(basename ${projectfile%.*})
 	else
-		projectname=""
+		projectname="*"
 	fi
 	echo $projectname
 }
