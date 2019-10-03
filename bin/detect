@@ -2,26 +2,47 @@
 # convenience functions
 source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
-if [ -n "$( find $1 -maxdepth 3 -iname startup.cs )" ]; then
+if [[ -f "$1/*.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
-else
-  error <<-EOF
-		Application not supported by this buildpack!
-		
-		The ASP.NET Core buildpack is set on this application, but was
-		unable to detect a ASP.NET Core codebase.
-		
-		An ASP.NET Core app on Heroku requires a 'Startup.cs' at the root of
-		the directory structure.
-		
-		If you are trying to deploy a ASP.NET Core application, ensure that 'Startup.cs' is present at the top level directory.
-		
-		If you are trying to deploy an application written in another
-		language, you need to change the list of buildpacks set on your
-		Heroku app using the 'heroku buildpacks' command.
-		
-		For more information, refer to the following documentation:
-		https://devcenter.heroku.com/articles/buildpacks
-		https://devcenter.heroku.com/articles/php-support#activation
-	EOF
 fi
+
+REQUIRED_FILES=""
+if [[ ! -f "$1/*.csproj" ]]; then
+	REQUIRED_FILES +="*.csproj"
+fi
+if [[ ! -f "$1/Startup.cs" ]]; then
+	if [[ ${#REQUIRED_FILES} == 0 ]]; then
+		REQUIRED_FILES +="Startup.cs"
+	else
+		REQUIRED_FILES +=", Startup.cs"
+	fi
+fi
+if [[ ! -f "$1/Program.cs" ]]; then
+	if [[ ${#REQUIRED_FILES} == 0 ]]; then
+		REQUIRED_FILES +="Program.cs"
+	else
+		REQUIRED_FILES +=", Program.cs"
+	fi
+fi
+
+error <<-EOF
+	Application not supported by this buildpack!
+
+	The ASP.NET Core buildpack is set on this application, but was
+	unable to detect a ASP.NET Core codebase.
+
+	An ASP.NET Core app requires the following file(s) ${REQUIRED_FILES} at the root of
+	the directory structure.
+
+	If you are trying to deploy a ASP.NET Core application, ensure that one
+	of these files(*.csproj, Startup.cs and Program.cs) is present at the top level directory
+
+	If you are trying to deploy an application written in another
+	language, you need to change the list of buildpacks set on your
+	Heroku app using the 'heroku buildpacks' command.
+
+	For more information, refer to the following documentation:
+	https://devcenter.heroku.com/articles/buildpacks
+	https://devcenter.heroku.com/articles/php-support#activation
+EOF
+exit 1
