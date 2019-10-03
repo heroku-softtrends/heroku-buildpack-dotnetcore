@@ -2,12 +2,12 @@
 # convenience functions
 source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
-if [[ -f "$1/*.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
+if [[ -f $1/*.csproj && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
 fi
 
 REQUIRED_FILES=""
-if [[ ! -e "$1/*.csproj" ]]; then
+if [[ ! -f $1/*.csproj ]]; then
 	REQUIRED_FILES+="*.csproj"
 fi
 if [[ ! -e "$1/Startup.cs" ]]; then
@@ -37,8 +37,8 @@ error <<-EOF
 	An ASP.NET Core app requires ${REQUIRED_FILES} file(s) at the root of
 	the directory structure.
 
-	If you are trying to deploy an ASP.NET Core application, ensure that ensure that these files(*.csproj, Startup.cs
-	and Program.cs) are present at the top level directory. 
+	If you are trying to deploy an ASP.NET Core application, ensure that ensure that these files
+	(*.csproj, Startup.cs and Program.cs) are present at the top level directory. 
 	
 	This directory has the following files:
 	$(ls -1p "$1")
