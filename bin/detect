@@ -8,7 +8,7 @@ fi
 
 REQUIRED_FILES=""
 if [[ ! -e "$1/*.csproj" ]]; then
-	REQUIRED_FILES +="*.csproj"
+	REQUIRED_FILES+="*.csproj"
 fi
 if [[ ! -e "$1/Startup.cs" ]]; then
  	echo "Startup not found"
@@ -32,13 +32,14 @@ error <<-EOF
 	Application not supported by this buildpack!
 
 	The ASP.NET Core buildpack is set on this application, but was
-	unable to detect a ASP.NET Core codebase.
+	unable to detect an ASP.NET Core codebase.
 
-	An ASP.NET Core app requires the following file(s) ${REQUIRED_FILES} at the root of
+	An ASP.NET Core app requires ${REQUIRED_FILES} file(s) at the root of
 	the directory structure.
 
-	If you are trying to deploy an ASP.NET Core application, ensure that ensure that one
-	of these files(*.csproj, Startup.cs and Program.cs) are present at the top level directory.
+	If you are trying to deploy an ASP.NET Core application, ensure that ensure that these files(*.csproj, Startup.cs
+	and Program.cs) are present at the top level directory. 
+	
 	This directory has the following files:
 	$(ls -1p "$1")
 	
