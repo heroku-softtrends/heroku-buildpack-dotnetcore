@@ -3,9 +3,7 @@
 source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
 
 PROJECT_NAME="$(getprojectname $1)"
-echo "The project: ${PROJECT_NAME}"
-
-if [[ -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
+if [[ -f "$1/${PROJECT_NAME}.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
   echo "ASP.NET Core" && exit 0
 else
 	error <<-EOF
