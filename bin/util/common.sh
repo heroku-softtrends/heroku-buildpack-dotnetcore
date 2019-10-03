@@ -15,11 +15,10 @@ error() {
 }
 
 getprojectname() {
+	local projectname=""
 	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
 	if [[ $projectfile ]]; then
 		projectname=$(basename ${projectfile%.*})
-	else
-		projectname="*"
 	fi
 	echo $projectname
 }
