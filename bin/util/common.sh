@@ -47,8 +47,7 @@ get_project_version() {
 
 function export_env_dir() {
   	local env_dir=$1
-  	#local whitelist_regex=${2:-'(CORE_VERSION|LIBUV_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
-  	local whitelist_regex=${2:-'(CORE_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
+  	local whitelist_regex=${2:-''}
   	local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
   	if [ -d "$env_dir" ]; then
     		for e in $(ls $env_dir); do
