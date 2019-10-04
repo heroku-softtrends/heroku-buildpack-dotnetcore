@@ -18,7 +18,6 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 ### Load dependencies
 
-source $BP_DIR/util
 # shellcheck source=util/common.sh
 source "$BP_DIR/util/common.sh"
 # shellcheck source=util/install.sh
