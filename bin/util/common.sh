@@ -26,9 +26,14 @@ error() {
 	exit 1
 }
 
-getprojectname() {
-	local projectname=""
+get_project_file() {
 	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
+	echo $projectfile
+}
+
+get_project_name() {
+	local projectname=""
+	local projectfile="$(get_project_file $1)"
 	if [[ $projectfile ]]; then
 		projectname=$(basename ${projectfile%.*})
 	fi
@@ -36,15 +41,15 @@ getprojectname() {
 }
 
 function export_env_dir() {
-  local env_dir=$1
-  #local whitelist_regex=${2:-'(CORE_VERSION|LIBUV_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
-  local whitelist_regex=${2:-'(CORE_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
-  local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
-  if [ -d "$env_dir" ]; then
-    for e in $(ls $env_dir); do
-      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
-      export "$e=$(cat $env_dir/$e)"
-      :
-    done
-  fi
+  	local env_dir=$1
+  	#local whitelist_regex=${2:-'(CORE_VERSION|LIBUV_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
+  	local whitelist_regex=${2:-'(CORE_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
+  	local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
+  	if [ -d "$env_dir" ]; then
+    		for e in $(ls $env_dir); do
+      		echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      		export "$e=$(cat $env_dir/$e)"
+      		:
+    		done
+  	fi
 }
