@@ -40,6 +40,11 @@ get_project_name() {
 	echo $projectname
 }
 
+get_project_version() {
+	local projectversion=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
+	echo $projectversion
+}
+
 function export_env_dir() {
   	local env_dir=$1
   	#local whitelist_regex=${2:-'(CORE_VERSION|LIBUV_VERSION|PROJECT|BUILD_DEBUG|CORE_BRANCH|CORE_REL_VERSION)$'}
