@@ -76,6 +76,7 @@ cd $BUILD_DIR
 dotnet --info
 
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
+PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 print "publish ${PROJECT_FILE}"
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
