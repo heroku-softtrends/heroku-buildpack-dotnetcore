@@ -19,9 +19,9 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 ### Load dependencies
 
 # shellcheck source=util/common.sh
-source "$BP_DIR/util/common.sh"
+source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
-source "$BP_DIR/util/install.sh"
+source "$BP_DIR/bin/util/install.sh"
 
 print "The current stack version: ${STACK}"
 local project_version="$(get_project_version $BUILD_DIR)"
