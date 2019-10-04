@@ -24,14 +24,14 @@ source "$BP_DIR/bin/util/common.sh"
 source "$BP_DIR/bin/util/install.sh"
 
 print "The current stack version: ${STACK}"
-local project_version="$(get_project_version $BUILD_DIR)"
+PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
 print "The current project version: ${PROJECT_VERSION}"
 
-if [ $project_version == "netcoreapp2.1" ]; then
+if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
 	NETCORE_VERSION="2.1.403"
-elif [ $project_version == "netcoreapp2.2" ]; then
+elif [ $PROJECT_VERSION == "netcoreapp2.2" ]; then
 	NETCORE_VERSION="2.2.402"
-elif [ $project_version == "netcoreapp3.0" ]; then
+elif [ $PROJECT_VERSION == "netcoreapp3.0" ]; then
 	NETCORE_VERSION="3.0.100"
 else
 	NETCORE_VERSION="2.2.401"
@@ -47,19 +47,19 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 
 print "Installing the dependencies"
 if [ $STACK == "cedar-14" ] || [ $STACK == "heroku-14" ]; then
-   	if [ $project_version == "netcoreapp2.1" ]; then
+   	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
 		apt_install libicu52
    	else
    		apt_install libunwind8 libicu52
    	fi
 elif [ $STACK == "heroku-16" ]; then
-	if [ $project_version == "netcoreapp2.1" ]; then
+	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
 		apt_install libicu55
    	else
    		apt_install libunwind8 libicu55
    	fi
 else
-	if [ $project_version == "netcoreapp2.1" ]; then
+	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
 		apt_install libicu60 openssl1.0
    	else
    		apt_install libunwind8 libicu60 openssl1.0
@@ -75,9 +75,9 @@ export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 cd $BUILD_DIR
 dotnet --info
 
-local project_file="$(get_project_file $BUILD_DIR)"
-print "publish ${project_file}"
-dotnet publish $project_file --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
+PROJECT_FILE="$(get_project_file $BUILD_DIR)"
+print "publish ${PROJECT_FILE}"
+dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
 #echo "Remove project files in production machine"
 find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \;
