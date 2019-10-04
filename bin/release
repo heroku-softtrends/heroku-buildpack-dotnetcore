@@ -12,6 +12,9 @@ EOF
 
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 print "Release: $PROJECT_NAME"
+#echo "Remove project files in production machine"
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \;
+
 if [ ! -f $BUILD_DIR/Procfile ]; then
     echo "default_process_types:"
     echo "  web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
