@@ -81,9 +81,8 @@ PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 print "publish ${PROJECT_FILE}"
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
-export APP_NAME=${PROJECT_NAME}
 #echo "Remove project files in production machine"
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} 2>/dev/null;
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \ > /dev/null 2>&1;
 
 #cat << EOT >> ${BUILD_DIR}/Procfile
 #web: cd \$HOME/heroku_output && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./${PROJECT_NAME}.dll"
