@@ -91,8 +91,8 @@ PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-#cd $BUILD_DIR
-find $BUILD_DIR -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
+cd $BUILD_DIR
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
