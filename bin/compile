@@ -19,7 +19,9 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 ### Load dependencies
 
-curl https://dot.net/v1/dotnet-install.sh --output "$BP_DIR/bin/util/dotnet-install.sh"
+DOTNET_INSTALL_PATH="$BP_DIR/bin/util/dotnet-install.sh"
+mkdir -p $(dirname $DOTNET_INSTALL_PATH)
+curl https://dot.net/v1/dotnet-install.sh --output "$DOTNET_INSTALL_PATH"
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
