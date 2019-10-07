@@ -1,18 +1,8 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
-source "$(cd $(dirname $0); cd ..; pwd)"/bin/util/common.sh
-BUILD_DIR=$1
-print "home: $HOME"
-print "Release: $PROJECT_NAME"
-
 cat <<EOF
 ---
 addons: []
 
 EOF
-
-if [ ! -f $BUILD_DIR/Procfile ]; then
-    echo "default_process_types:"
-    echo "  web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
-fi
