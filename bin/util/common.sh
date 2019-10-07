@@ -1,8 +1,8 @@
-function print() {
+print() {
   echo "-----> $*"
 }
 
-function indent() {
+indent() {
   c='s/^/       /'
   case $(uname) in
     Darwin) sed -l "$c";;
@@ -10,7 +10,25 @@ function indent() {
   esac
 }
 
-function error() {
+get_os() {
+  uname | tr '[:upper:]' '[:lower:]'
+}
+
+get_cpu() {
+  if [[ "$(uname -p)" = "i686" ]]; then
+    echo "x86"
+  else
+    echo "x64"
+  fi
+}
+
+get_platform() {
+  os=$(get_os)
+  cpu=$(get_cpu)
+  echo "$os-$cpu"
+}
+
+error() {
 	local c="2,999 s/^/ !     /"
 	# send all of our output to stderr
 	exec 1>&2
@@ -26,15 +44,20 @@ function error() {
 	exit 1
 }
 
-function export_env_dir() {
-  	local env_dir=$1
-  	local whitelist_regex=${2:-''}
-  	local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH)$'}
-  	if [ -d "$env_dir" ]; then
-    		for e in $(ls $env_dir); do
-      		echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
-      		export "$e=$(cat $env_dir/$e)"
-      		:
-    		done
-  	fi
+export_env_dir() {
+  local env_dir=$1
+  if [ -d "$env_dir" ]; then
+    local whitelist_regex=${2:-''}
+    local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|LANG|BUILD_DIR)$'}
+    # shellcheck disable=SC2164
+    pushd "$env_dir" >/dev/null
+    for e in *; do
+      [ -e "$e" ] || continue
+      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      export "$e=$(cat "$e")"
+      :
+    done
+    # shellcheck disable=SC2164
+    popd >/dev/null
+  fi
 }
