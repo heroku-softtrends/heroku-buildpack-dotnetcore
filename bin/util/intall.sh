@@ -1,30 +1,49 @@
 #!/usr/bin/env bash
 
+function get_project_file() {
+	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
+	echo $projectfile
+}
+
+function get_project_name() {
+	local projectname=""
+	local projectfile="$(get_project_file $1)"
+	if [[ $projectfile ]]; then
+		projectname=$(basename ${projectfile%.*})
+	fi
+	echo $projectname
+}
+
+function get_project_version() {
+	local projectversion=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
+	echo $projectversion
+}
+
 function install_dotnet() {
   local netcore_version="$1"
   local tar_file_name="dotnet-${netcore_version}.tar.gz"
   
   print "Dotnet sdk: $netcore_version"
   if [ ! -f $CACHE_DIR/$tar_file_name ]; then
-    #https://github.com/dotnet/core/blob/master/release-notes
-    local url=""
-	  if [ "$netcore_version" == "2.1.4" ]; then
+    	#https://github.com/dotnet/core/blob/master/release-notes
+    	local url=""
+	if [ "$netcore_version" == "2.1.4" ]; then
 		      url="https://download.microsoft.com/download/1/1/5/115B762D-2B41-4AF3-9A63-92D9680B9409/dotnet-sdk-2.1.4-linux-x64.tar.gz"
-	  elif [ "$netcore_version" == "2.1.403" ] || [ "$netcore_version" == "2.1.4"* ]; then
+	elif [ "$netcore_version" == "2.1.403" ] || [ "$netcore_version" == "2.1.4"* ]; then
           url="https://download.visualstudio.microsoft.com/download/pr/e85de743-f80b-481b-b10e-d2e37f05a7ce/0bf3ff93417e19ad8d6b2d3ded84d664/dotnet-sdk-2.1.403-linux-x64.tar.gz"
-    elif [ "$netcore_version" == "2.2.104" ] || [ "$netcore_version" == "2.2"* ]; then
+    	elif [ "$netcore_version" == "2.2.104" ] || [ "$netcore_version" == "2.2"* ]; then
           url="https://download.visualstudio.microsoft.com/download/pr/69937b49-a877-4ced-81e6-286620b390ab/8ab938cf6f5e83b2221630354160ef21/dotnet-sdk-2.2.104-linux-x64.tar.gz"
-    elif [ "$netcore_version" == "2.2.103" ] || [ "$netcore_version" == "2.2"* ]; then
+    	elif [ "$netcore_version" == "2.2.103" ] || [ "$netcore_version" == "2.2"* ]; then
           url="https://download.visualstudio.microsoft.com/download/pr/296e116b-30d7-4e1c-8238-ec8c7c4c7b79/43d6cd35d95e38675d472c56a24c3bd0/dotnet-sdk-2.2.103-linux-x64.tar.gz"
-    elif [ "$netcore_version" == "2.2.401" ] || [ "$netcore_version" == "2.2"* ]; then
+    	elif [ "$netcore_version" == "2.2.401" ] || [ "$netcore_version" == "2.2"* ]; then
           url="https://download.visualstudio.microsoft.com/download/pr/228832ea-805f-45ab-8c88-fa36165701b9/16ce29a06031eeb09058dee94d6f5330/dotnet-sdk-2.2.401-linux-x64.tar.gz"
-	  elif [ "$netcore_version" == "2.2.402" ] || [ "$netcore_version" == "2.2"* ]; then
+	elif [ "$netcore_version" == "2.2.402" ] || [ "$netcore_version" == "2.2"* ]; then
 		      url="https://download.visualstudio.microsoft.com/download/pr/46411df1-f625-45c8-b5e7-08ab736d3daa/0fbc446088b471b0a483f42eb3cbf7a2/dotnet-sdk-2.2.402-linux-x64.tar.gz"
-	  elif [ "$netcore_version" == "3.0.100" ] || [ "$netcore_version" == "3.0"* ]; then
+	elif [ "$netcore_version" == "3.0.100" ] || [ "$netcore_version" == "3.0"* ]; then
 		      url="https://download.visualstudio.microsoft.com/download/pr/886b4a4c-30af-454b-8bec-81c72b7b4e1f/d1a0c8de9abb36d8535363ede4a15de6/dotnet-sdk-3.0.100-linux-x64.tar.gz"
-    fi
-      print "Download url: $url"
-      curl -sSL -o $CACHE_DIR/$tar_file_name $url
+    	fi
+      	print "Download url: $url"
+      	curl -sSL -o $CACHE_DIR/$tar_file_name $url
   else
     echo "$tar_file_name from cache folder"
   fi
