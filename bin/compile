@@ -24,7 +24,6 @@ curl https://dot.net/v1/dotnet-install.sh >> "$BP_DIR/bin/util/dotnet-install.sh
 source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
-$(ls -1p "$BP_DIR/bin")
 
 print "The current stack version: ${STACK}"
 PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
