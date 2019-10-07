@@ -62,8 +62,9 @@ fi
 
 print "Installing dotnet"
 $BP_DIR/bin/util/dotnet-install.sh --channel LTS --version $NETCORE_VERSION --install-dir $BUILD_DIR/.dotnet
-ln -s ${BUILD_DIR}/.dotnet /app
-#install_dotnet $NETCORE_VERSION
+
+# Add symbolic link for dotnet
+ln -s ${BUILD_DIR}/.dotnet $HOME
 
 # Add dotnet runtime path to environment variable that is available to access dotnet command
 export PATH="$PATH:$HOME/.dotnet"
@@ -91,7 +92,7 @@ dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration R
 
 # Remove src files in production machine
 #cd $BUILD_DIR
-#find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
+find $BUILD_DIR -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
