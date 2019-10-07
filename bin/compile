@@ -69,6 +69,8 @@ export PATH="/app/.dotnet:$PATH"
 
 # Check dotnet version
 dotnet --info
+print "dotnet publish --help"
+dotnet publish --help
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
