@@ -67,6 +67,9 @@ fi
 print "Installing dotnet"
 install_dotnet $NETCORE_VERSION
 
+export PATH="/app/dotnet:${PATH}"
+#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 
@@ -78,9 +81,6 @@ echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PA
 echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/i386-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/pkgconfig"' >> $PROFILE_PATH
-
-#export PATH="/app/dotnet:${PATH}"
-#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
 
 cd $BUILD_DIR
 dotnet --info
