@@ -61,7 +61,7 @@ else
 fi
 
 print "Installing dotnet"
-$BP_DIR/bin/util/dotnet-install.sh --runtime dotnet --channel LTS --install-dir $HOME/.dotnet --version 3.0.0
+$BP_DIR/bin/util/dotnet-install.sh --channel LTS --install-dir $HOME/.dotnet --version 3.0.0
 #install_dotnet $NETCORE_VERSION
 
 # Add dotnet runtime path to environment variable that is available to access dotnet command
