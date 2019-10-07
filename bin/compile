@@ -65,7 +65,7 @@ $BP_DIR/bin/util/dotnet-install.sh --channel LTS --version $NETCORE_VERSION --in
 #install_dotnet $NETCORE_VERSION
 
 # Add dotnet runtime path to environment variable that is available to access dotnet command
-export PATH="/app/.dotnet:$PATH"
+export PATH="$PATH:$HOME/.dotnet"
 
 # Check dotnet version
 dotnet --info
