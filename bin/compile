@@ -25,6 +25,8 @@ source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
 
+cat "$BP_DIR/bin/util/dotnet-install.sh"
+
 print "The current stack version: ${STACK}"
 PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
 print "The current project version: ${PROJECT_VERSION}"
