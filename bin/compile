@@ -39,7 +39,7 @@ else
 fi
 print "The dotnet sdk version: ${NETCORE_VERSION} to be installed"
 
-export_env_dir $ENV_DIR
+# Skip TELEMETRY_OPTOUT on production environment
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=${DOTNET_SKIP_FIRST_TIME_EXPERIENCE:-1}
 export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 
@@ -67,8 +67,11 @@ fi
 print "Installing dotnet"
 install_dotnet $NETCORE_VERSION
 
-export PATH="/app/dotnet:${PATH}"
-#export LD_LIBRARY_PATH="${LD_LIBRARY_PATH}"
+# Add dotnet runtime path to environment variable that is available to access dotnet command
+export PATH="/app/dotnet:$PATH"
+
+# Check dotnet version
+dotnet --info
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
@@ -82,17 +85,16 @@ echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/i386-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/pkgconfig"' >> $PROFILE_PATH
 
-cd $BUILD_DIR
-dotnet --info
-
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
-print "Project name: $PROJECT_NAME"
+# https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
+# dotnet publish [<PROJECT>]
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
-#Remove src files in production machine
+# Remove src files in production machine
 find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
+# Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
 web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
 EOT
