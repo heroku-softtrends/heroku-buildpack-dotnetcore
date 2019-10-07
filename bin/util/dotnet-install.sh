@@ -249,10 +249,10 @@ check_pre_reqs() {
             echo "ldconfig is not in PATH, trying /sbin/ldconfig."
             LDCONFIG_COMMAND="/sbin/ldconfig"
         else
-            LDCONFIG_COMMAND="ldconfig"
+            LDCONFIG_COMMAND="pkgconfig"
         fi
 
-        local librarypath=${LD_LIBRARY_PATH:-}
+        local librarypath=${PGK_LIBRARY_PATH:-}
         LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ }"
 
         [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libunwind)" ] && say_warning "Unable to locate libunwind. Probable prerequisite missing; install libunwind."
