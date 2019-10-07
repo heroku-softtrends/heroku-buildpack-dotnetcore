@@ -19,7 +19,6 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 ### Load dependencies
 
-curl https://dot.net/v1/dotnet-install.sh >> "$BP_DIR/bin/util/dotnet-install.sh"
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
@@ -62,7 +61,8 @@ else
 fi
 
 print "Installing dotnet"
-$BP_DIR/bin/util/dotnet-install.sh --runtime dotnet --channel LTS --version $NETCORE_VERSION
+$BP_DIR/bin/util/dotnet-install.sh --runtime aspnetcore --channel LTS --install-dir $HOME/.dotnet
+#--version $NETCORE_VERSION
 #install_dotnet $NETCORE_VERSION
 
 # Add dotnet runtime path to environment variable that is available to access dotnet command
