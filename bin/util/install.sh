@@ -19,6 +19,18 @@ function get_project_version() {
 	echo $projectversion
 }
 
+function get_netcore_version() {
+	local netcoreversion="2.2.401" # set dotnet default version
+	if [ $1 == "netcoreapp2.1" ]; then
+		netcoreversion="2.1.403"
+	elif [ $1 == "netcoreapp2.2" ]; then
+		netcoreversion="2.2.402"
+	elif [ $1 == "netcoreapp3.0" ]; then
+		netcoreversion="3.0.100"
+	fi
+	echo $netcoreversion
+}
+
 function install_dotnet() {
   local netcore_version="$1"
   local tar_file_name="dotnet-${netcore_version}.tar.gz"
