@@ -27,23 +27,17 @@ source "$BP_DIR/bin/util/install.sh"
 print "The current stack version: ${STACK}"
 PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
 print "The current project version: ${PROJECT_VERSION}"
-
-if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
-	NETCORE_VERSION="2.1.403"
-elif [ $PROJECT_VERSION == "netcoreapp2.2" ]; then
-	NETCORE_VERSION="2.2.402"
-elif [ $PROJECT_VERSION == "netcoreapp3.0" ]; then
-	NETCORE_VERSION="3.0.100"
-else
-	NETCORE_VERSION="2.2.401"
-fi
+NETCORE_VERSION="$(get_netcore_version $PROJECT_VERSION)"
 print "The dotnet sdk version: ${NETCORE_VERSION} to be installed"
+print "OS: $(get_os)"
+print "CPU: $(get_cpu)"
+print "Platform: $(get_platform)"
 
 # Skip TELEMETRY_OPTOUT on production environment
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=${DOTNET_SKIP_FIRST_TIME_EXPERIENCE:-1}
 export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 
-print "Installing the dependencies"
+print "Installing prerequisites for .NET Core on Ubuntu"
 if [ $STACK == "cedar-14" ] || [ $STACK == "heroku-14" ]; then
    	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
 		apt_install libicu52
@@ -89,7 +83,7 @@ PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
-dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
+dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --no-restore --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
 find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
