@@ -76,7 +76,7 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Export vars
-echo 'export PATH="$PATH:$HOME/.heroku/dotnet:$HOME/.apt/usr/bin"' >> $PROFILE_PATH
+echo 'export PATH="$PATH:$HOME/.dotnet:$HOME/.apt/usr/bin"' >> $PROFILE_PATH
 echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"' >> $PROFILE_PATH
 echo 'export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"' >> $PROFILE_PATH
 echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PATH
@@ -91,7 +91,7 @@ PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .heroku ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
