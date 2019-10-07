@@ -61,7 +61,7 @@ else
 fi
 
 print "Installing dotnet"
-$BP_DIR/bin/util/dotnet-install.sh --runtime aspnetcore --channel LTS --install-dir $HOME/.dotnet
+#$BP_DIR/bin/util/dotnet-install.sh --runtime aspnetcore --channel LTS --install-dir $HOME/.dotnet
 #--version $NETCORE_VERSION
 #install_dotnet $NETCORE_VERSION
 
