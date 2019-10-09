@@ -98,7 +98,7 @@ function apt_install(){
   for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
     print "Installing $(basename $DEB)"
     #dpkg -x $DEB "$BUILD_DIR/.apt/"
-    dpkg -x $DEB
+    dpkg -x --force-not-root --root=$HOME $DEB 
   done
   
   export PATH="$PATH:$BUILD_DIR/usr/bin"
