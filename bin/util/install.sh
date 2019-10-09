@@ -94,7 +94,7 @@ function apt_install(){
       apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
     fi
     
-    apt-cache show $package | grep Filename
+    ls $apt_cache_dir/archives | grep $package
     print "Installing $package"
     dpkg -x $DEB "$BUILD_DIR/.apt/"
   done
