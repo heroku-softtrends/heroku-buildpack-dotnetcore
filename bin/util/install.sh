@@ -81,6 +81,8 @@ function apt_install(){
   print "Updating apt caches"
   apt-get  --allow-unauthenticated $apt_options update | indent
 
+  mkdir -p "$BUILD_DIR/.apt"
+  
   for package in "$@"; do
     if [[ $package == *deb ]]; then
       local package_name=$(basename $package .deb)
@@ -91,13 +93,8 @@ function apt_install(){
       print "Fetching .debs for $package"
       apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
     fi
-  done
-  
-  mkdir -p "$BUILD_DIR/.apt"
-
-  for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
-    print "Installing $(basename $DEB)"
-    print "Installing $(basename $DEB .deb)"
+    
+    print "Installing $package"
     dpkg -x $DEB "$BUILD_DIR/.apt/"
   done
   
