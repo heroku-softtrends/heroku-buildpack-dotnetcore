@@ -97,16 +97,16 @@ function apt_install(){
 
   for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
     print "Installing $(basename $DEB)"
-    #dpkg -x $DEB "$BUILD_DIR/.apt/"
-    dpkg -x --force-not-root --root=$HOME $DEB 
+    print "Installing $(basename $DEB .deb)"
+    dpkg -x $DEB "$BUILD_DIR/.apt/"
   done
   
-  export PATH="$PATH:$BUILD_DIR/usr/bin"
-  export LD_LIBRARY_PATH="$BUILD_DIR/usr/lib/x86_64-linux-gnu:$BUILD_DIR/usr/lib/i386-linux-gnu:$BUILD_DIR/usr/lib:${LD_LIBRARY_PATH-}"
-  export LIBRARY_PATH="$BUILD_DIR/usr/lib/x86_64-linux-gnu:$BUILD_DIR/usr/lib/i386-linux-gnu:$BUILD_DIR/usr/lib:${LIBRARY_PATH-}"
-  export INCLUDE_PATH="$BUILD_DIR/usr/include:${INCLUDE_PATH-}"
+  export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
+  export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
+  export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LIBRARY_PATH-}"
+  export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
   export CPATH="${INCLUDE_PATH-}"
   export CPPPATH="${INCLUDE_PATH-}"
-  export PKG_CONFIG_PATH="$BUILD_DIR/usr/lib/x86_64-linux-gnu/pkgconfig:$BUILD_DIR/usr/lib/i386-linux-gnu/pkgconfig:$BUILD_DIR/usr/lib/pkgconfig:${PKG_CONFIG_PATH-}"
+  export PKG_CONFIG_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu/pkgconfig:$BUILD_DIR/.apt/usr/lib/pkgconfig:${PKG_CONFIG_PATH-}"
   print "APT packages Installled"
 }
