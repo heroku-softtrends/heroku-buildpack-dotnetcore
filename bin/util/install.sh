@@ -96,7 +96,7 @@ function apt_install(){
     
     print "Installing $package"
     local deb="$(ls $apt_cache_dir/archives | grep $package)"
-    dpkg -x $deb "$BUILD_DIR/.apt/"
+    dpkg -x $apt_cache_dir/archives/$deb "$BUILD_DIR/.apt/"
   done
   
   export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
