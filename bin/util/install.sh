@@ -94,9 +94,9 @@ function apt_install(){
       apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
     fi
     
-    ls $apt_cache_dir/archives | grep $package
     print "Installing $package"
-    dpkg -x $DEB "$BUILD_DIR/.apt/"
+    local deb="$(ls $apt_cache_dir/archives | grep $package)"
+    dpkg -x $deb "$BUILD_DIR/.apt/"
   done
   
   export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
