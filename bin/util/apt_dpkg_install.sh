@@ -19,7 +19,7 @@ function apt_install(){
 
 	mkdir -p "$BUILD_DIR/.apt"
 	
-	local is_set_path = false
+	declare is_set_path = 0
 
 	for package in "$@"; do
 		if [[ $(is_dpkg_installed $package) == 0 ]]; then
@@ -35,13 +35,13 @@ function apt_install(){
 			
 			print "Installing $(basename $package_file)"
 			dpkg -x $package_file "$BUILD_DIR/.apt/"
-			is_set_path = true
+			is_set_path = 1
 		else
 			print "$(basename $package_file) already has installed"
 		fi
 	done
 
-	if [[ is_set_path ]]; then
+	if [[ is_set_path == 1 ]]; then
 		export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
 		export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
 		export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LIBRARY_PATH-}"
