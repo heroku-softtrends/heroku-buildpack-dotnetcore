@@ -24,8 +24,9 @@ source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
 
+declare stack_version="$(get_linux_platform_version)"
 print "OS: $(get_os)"
-print "Stack Version: $(get_linux_platform_version)"
+print "Stack Version: $stack_version"
 print "Heroku Stack Version: ${STACK}"
 
 print "Installing prerequisites for .NET Core on Ubuntu"
