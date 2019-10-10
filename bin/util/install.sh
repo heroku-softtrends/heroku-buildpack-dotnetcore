@@ -102,11 +102,10 @@ function apt_install(){
   done
   
   export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
-  export LD_LIBRARY_PATH="$BUILD_DIR/.apt/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/lib/i386-linux-gnu:$BUILD_DIR/.apt/lib:${LD_LIBRARY_PATH-}"
-  export LIBRARY_PATH="$BUILD_DIR/.apt/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/lib/i386-linux-gnu:$BUILD_DIR/.apt/lib:${LIBRARY_PATH-}"
+  export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
+  export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/lib:${LIBRARY_PATH-}"
   export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
   export CPATH="${INCLUDE_PATH-}"
   export CPPPATH="${INCLUDE_PATH-}"
-  export PKG_CONFIG_PATH="$BUILD_DIR/.apt/lib/x86_64-linux-gnu/pkgconfig:$BUILD_DIR/.apt/lib/i386-linux-gnu/pkgconfig:$BUILD_DIR/.apt/lib/pkgconfig:${PKG_CONFIG_PATH-}"
   print "APT packages Installled"
 }
