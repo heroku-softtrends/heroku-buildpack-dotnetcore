@@ -31,7 +31,7 @@ get_platform() {
 get_linux_platform_version() {
 	if [ -e /etc/os-release ]; then
 	    . /etc/os-release
-	    echo "$VERSION_ID"
+	    echo "${VERSION_ID//[a-z]/}"
 	    return 0
 	fi
 
