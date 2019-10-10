@@ -24,43 +24,31 @@ source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
 
-declare stack_version="$(get_linux_platform_version)"
-print "OS: $(get_os)"
-print "Stack Version: $stack_version"
-print "Heroku Stack Version: ${STACK}"
+### Local variable declaration
+declare herokuos_version framework_version runtime_framework_version
+
+# Get OS
+herokuos_version="$(get_linux_platform_version)"
+
+print "OS: Ubuntu.$herokuos_version"
+print "Stack version: ${STACK}"
+
+# Get .net core framework version
+framework_version="$(get_framework_version $BUILD_DIR)"
+print "The current project version: ${framework_version}"
 
 print "Installing prerequisites for .NET Core on Ubuntu"
-if [ $STACK == "cedar-14" ] || [ $STACK == "heroku-14" ]; then
-   	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
-		apt_install libicu52
-   	else
-   		apt_install libunwind8 libicu52
-   	fi
-elif [ $STACK == "heroku-16" ]; then
-	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
-		apt_install libicu55
-   	else
-   		apt_install libunwind8 libicu55
-   	fi
-else
-	if [ $PROJECT_VERSION == "netcoreapp2.1" ]; then
-		apt_install libicu60 openssl1.0
-   	else
-   		apt_install libunwind8 libicu60 openssl1.0
-   	fi
-fi
+apt_install $herokuos_version $framework_version
 
-PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
-print "The current project version: ${PROJECT_VERSION}"
-NETCORE_VERSION="$(get_netcore_version $PROJECT_VERSION)"
-print "The dotnet sdk version: ${NETCORE_VERSION} to be installed"
+runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
+print "The dotnet sdk version: ${runtime_framework_version} to be installed"
 
 # Skip TELEMETRY_OPTOUT on production environment
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=${DOTNET_SKIP_FIRST_TIME_EXPERIENCE:-1}
 export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 
 print "Installing dotnet"
-$BP_DIR/bin/util/dotnet-install.sh --channel LTS --version $NETCORE_VERSION --install-dir $BUILD_DIR/.dotnet
+$BP_DIR/bin/util/dotnet-install.sh --channel LTS --version $runtime_framework_version --install-dir $BUILD_DIR/.dotnet
 
 # Add symbolic link for dotnet
 ln -s ${BUILD_DIR}/.dotnet $HOME
