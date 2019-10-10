@@ -19,7 +19,7 @@ function apt_install(){
 
 	mkdir -p "$BUILD_DIR/.apt"
 	
-	declare is_set_path = 0
+	declare -i is_set_path=0
 
 	for package in "$@"; do
 		if [[ $(is_dpkg_installed $package) == 0 ]]; then
