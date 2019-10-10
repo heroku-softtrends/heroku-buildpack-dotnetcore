@@ -99,6 +99,7 @@ function apt_install(){
     dpkg -x $apt_cache_dir/archives/$deb "$BUILD_DIR/.apt/"
     ls -a "$BUILD_DIR/.apt/"
     dpkg -c $apt_cache_dir/archives/$deb
+    dpkg -l $deb
     #ln -s $BUILD_DIR/.apt/$package-@PACKAGE_VERSION@ ${DESTDIR}/usr/local/bin/s
   done
   
