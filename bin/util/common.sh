@@ -31,7 +31,7 @@ get_platform() {
 get_linux_platform_version() {
 	if [ -e /etc/os-release ]; then
 	    . /etc/os-release
-	    echo "${VERSION_ID//[a-z]/}"
+	    echo ${VERSION_ID//[a-z]/}
 	    return 0
 	fi
 
@@ -79,25 +79,25 @@ get_project_file() {
 }
 
 get_project_name() {
-	local projectname=""
-	local projectfile="$(get_project_file $1)"
-	if [[ $projectfile ]]; then
-		projectname=$(basename ${projectfile%.*})
+	local project_name=""
+	local project_file="$(get_project_file $1)"
+	if [[ $project_file ]]; then
+		project_name=$(basename ${project_file%.*})
 	fi
-	echo $projectname
+	echo $project_name
 }
 
 get_framework_version() {
 	local target_framework=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
 	if [[ $target_framework =~ ";" ]]; then
-	 	target_framework=$(cut -d ';' -f 1 <<< "$target_framework")
+	 	echo $(cut -d ';' -f 1 <<< $target_framework)
+	else
+		echo ${target_framework//[a-z]/}
 	fi
-	echo "${target_framework//[a-z]/}"
 }
 
 get_runtime_framework_version() {
 	local runtime_framework_version=$(grep -oPm1 "(?<=<RuntimeFrameworkVersion>)[^<]+" $1/*.csproj)
-	print "Runtime Framework Version: $runtime_framework_version"
 	if [[ ${#runtime_framework_version} -eq 0 ]]; then
 		echo "Latest"
 	else
