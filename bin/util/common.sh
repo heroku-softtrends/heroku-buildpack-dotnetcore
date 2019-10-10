@@ -28,23 +28,6 @@ get_platform() {
 	echo "$os-$cpu"
 }
 
-get_linux_platform_name() {
-	if [ -e /etc/os-release ]; then
-	    . /etc/os-release
-	    echo "$ID.$VERSION_ID"
-	    return 0
-	elif [ -e /etc/redhat-release ]; then
-	    local redhatRelease=$(</etc/redhat-release)
-	    if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux "*" release 6."* ]]; then
-		echo "rhel.6"
-		return 0
-	    fi
-	fi
-
-	print "Linux specific platform name and version could not be detected: UName = $uname"
-	return 1
-}
-
 get_linux_platform_version() {
 	if [ -e /etc/os-release ]; then
 	    . /etc/os-release
