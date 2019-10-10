@@ -18,15 +18,16 @@ function apt_install(){
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
 	for package in "$@"; do
-		[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libunwind)" ]
-		if [[ $package == *deb ]]; then
-			local package_name=$(basename $package .deb)
-			local package_file=$apt_cache_dir/archives/$package_name.deb
-			print "Fetching $package"
-			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
-		else
-			print "Fetching .debs for $package"
-			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+		if [[ $(is_dpkg_installed $package) == 0 ]]; then
+			if [[ $package == *deb ]]; then
+				local package_name=$(basename $package .deb)
+				local package_file=$apt_cache_dir/archives/$package_name.deb
+				print "Fetching $package"
+				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
+			else
+				print "Fetching .debs for $package"
+				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+			fi
 		fi
 	done
 
