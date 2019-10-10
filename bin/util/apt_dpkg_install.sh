@@ -37,7 +37,7 @@ function apt_install(){
 			dpkg -x $package_file "$BUILD_DIR/.apt/"
 			is_set_path = 1
 		else
-			print "$(basename $package_file) already has installed"
+			print "$(basename $package .deb) already has installed"
 		fi
 	done
 
