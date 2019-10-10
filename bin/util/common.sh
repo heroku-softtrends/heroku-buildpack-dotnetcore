@@ -90,9 +90,9 @@ get_project_name() {
 get_framework_version() {
 	local target_framework=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
 	if [[ $target_framework =~ ";" ]]; then
-	 	echo $(cut -d ';' -f 1 <<< $target_framework)
+	 	echo $(cut -d ';' -f 1 <<< $target_framework) + 0
 	else
-		echo ${target_framework//[a-z]/}
+		echo ${target_framework//[a-z]/} + 0
 	fi
 }
 
