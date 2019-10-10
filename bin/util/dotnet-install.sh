@@ -252,10 +252,10 @@ check_pre_reqs() {
             LDCONFIG_COMMAND="pkgconfig"
         fi
 
-        local librarypath=${PGK_LIBRARY_PATH:-}
+        local librarypath=${LD_LIBRARY_PATH:-}
         LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ }"
-
-        [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libunwind8)" ] && say_warning "Unable to locate libunwind8. Probable prerequisite missing; install libunwind8."
+        echo "$LDCONFIG_COMMAND"
+        [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libunwind)" ] && say_warning "Unable to locate libunwind. Probable prerequisite missing; install libunwind."
         [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libssl)" ] && say_warning "Unable to locate libssl. Probable prerequisite missing; install libssl."
         [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libicu)" ] && say_warning "Unable to locate libicu. Probable prerequisite missing; install libicu."
         [ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep -F libcurl.so)" ] && say_warning "Unable to locate libcurl. Probable prerequisite missing; install libcurl."
