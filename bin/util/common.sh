@@ -116,3 +116,7 @@ get_netcore_version() {
 	fi
 	echo $netcoreversion
 }
+
+decimal_compare() {
+   awk -v n1="$1" -v n2="$2" 'BEGIN {printf "%s " "$3" " %s\n", n1, n2}'
+}
