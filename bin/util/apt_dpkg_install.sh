@@ -36,6 +36,8 @@ function apt_install(){
 			print "Installing $(basename $package_file)"
 			dpkg -x $package_file "$BUILD_DIR/.apt/"
 			is_set_path = true
+		else
+			print "$(basename $package_file) already has installed"
 		fi
 	done
 
@@ -46,7 +48,7 @@ function apt_install(){
 		export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
 		export CPATH="${INCLUDE_PATH-}"
 		export CPPPATH="${INCLUDE_PATH-}"
-		echo "APT packages Installled"
+		echo "Environment variables has exported"
 	fi
 }
 
