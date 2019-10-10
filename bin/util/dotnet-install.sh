@@ -766,6 +766,9 @@ install_dotnet() {
     fi
 
     #  Check if the SDK version is already installed.
+    say "install root: $install_root"
+    say "asset relative path: $asset_relative_path"
+    say "specific version: $specific_version"
     if is_dotnet_package_installed "$install_root" "$asset_relative_path" "$specific_version"; then
         say "$asset_name version $specific_version is already installed."
         return 0
