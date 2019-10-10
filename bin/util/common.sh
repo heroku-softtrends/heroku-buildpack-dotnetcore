@@ -1,31 +1,48 @@
 print() {
-  echo "-----> $*"
+	echo "-----> $*"
 }
 
 indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
+	c='s/^/       /'
+	case $(uname) in
+	Darwin) sed -l "$c";;
+	*)      sed -u "$c";;
+	esac
 }
 
 get_os() {
-  uname | tr '[:upper:]' '[:lower:]'
+	uname | tr '[:upper:]' '[:lower:]'
 }
 
 get_cpu() {
-  if [[ "$(uname -p)" = "i686" ]]; then
-    echo "x86"
-  else
-    echo "x64"
-  fi
+	if [[ "$(uname -p)" = "i686" ]]; then
+	echo "x86"
+	else
+	echo "x64"
+	fi
 }
 
 get_platform() {
-  os=$(get_os)
-  cpu=$(get_cpu)
-  echo "$os-$cpu"
+	os=$(get_os)
+	cpu=$(get_cpu)
+	echo "$os-$cpu"
+}
+
+get_linux_platform_name() {
+	if [ -e /etc/os-release ]; then
+	    . /etc/os-release
+	    echo "$ID.$VERSION_ID"
+	    return 0
+	elif [ -e /etc/redhat-release ]; then
+	    local redhatRelease=$(</etc/redhat-release)
+	    if [[ $redhatRelease == "CentOS release 6."* || $redhatRelease == "Red Hat Enterprise Linux "*" release 6."* ]]; then
+		echo "rhel.6"
+		return 0
+	    fi
+	fi
+
+	print "Linux specific platform name and version could not be detected: UName = $uname"
+	return 1
 }
 
 error() {
