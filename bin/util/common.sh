@@ -45,6 +45,17 @@ get_linux_platform_name() {
 	return 1
 }
 
+get_linux_platform_version() {
+	if [ -e /etc/os-release ]; then
+	    . /etc/os-release
+	    echo "$VERSION_ID"
+	    return 0
+	fi
+
+	print "Linux specific platform version could not be detected: UName = $uname"
+	return 1
+}
+
 error() {
 	local c="2,999 s/^/ !     /"
 	# send all of our output to stderr
