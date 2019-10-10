@@ -20,7 +20,7 @@ if [[ -f "$1/$project_name.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]
 	declare herokuos_version framework_version
 	
 	# Get OS version
-	herokuos_version=expr $(get_linux_platform_version)
+	herokuos_version=$(get_linux_platform_version)
 	echo 'OS: printf("%f",$herokuos_version)'
 	
 	# Get application framework verson
