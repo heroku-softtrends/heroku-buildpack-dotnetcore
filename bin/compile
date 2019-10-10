@@ -23,17 +23,11 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
-# shellcheck source=util/dotnet-install.sh
-#source "$BP_DIR/bin/util/dotnet-install.sh"
 
 print "The current stack version: ${STACK}"
-PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
-print "The current project version: ${PROJECT_VERSION}"
-NETCORE_VERSION="$(get_netcore_version $PROJECT_VERSION)"
-print "The dotnet sdk version: ${NETCORE_VERSION} to be installed"
-#print "OS: $(get_os)"
-#print "CPU: $(get_cpu)"
-#print "Platform: $(get_platform)"
+print "OS: $(get_os)"
+print "CPU: $(get_cpu)"
+print "Platform: $(get_platform)"
 
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [ $STACK == "cedar-14" ] || [ $STACK == "heroku-14" ]; then
@@ -55,6 +49,11 @@ else
    		apt_install libunwind8 libicu60 openssl1.0
    	fi
 fi
+
+PROJECT_VERSION="$(get_project_version $BUILD_DIR)"
+print "The current project version: ${PROJECT_VERSION}"
+NETCORE_VERSION="$(get_netcore_version $PROJECT_VERSION)"
+print "The dotnet sdk version: ${NETCORE_VERSION} to be installed"
 
 # Skip TELEMETRY_OPTOUT on production environment
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=${DOTNET_SKIP_FIRST_TIME_EXPERIENCE:-1}
