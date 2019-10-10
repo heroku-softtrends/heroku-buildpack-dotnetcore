@@ -88,8 +88,14 @@ get_project_name() {
 }
 
 get_framework_version() {
-	local projectversion=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
-	echo "${projectversion//[a-z]/}"
+	local target_framework=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
+	print "$target_framework//;/[0]"
+	echo "${target_framework//[a-z]/}"
+}
+
+get_runtime_framework_version() {
+	local runtime_framework_version=$(grep -oPm1 "(?<=<RuntimeFrameworkVersion>)[^<]+" $1/*.csproj)
+	echo "${runtime_framework_version//[a-z]/}"
 }
 
 get_netcore_version() {
