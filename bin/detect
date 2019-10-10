@@ -25,12 +25,10 @@ if [[ -f "$1/$project_name.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]
 	# Get application framework verson
 	framework_version=$(get_framework_version $1)
 	
-	print "check: $(awk 'BEGIN {print ("'$framework_version'" >= "'2.1'")}') -eq 1"
-	
 	if  [[ $(awk 'BEGIN {print ("'$herokuos_version'" >= "'16.04'")}') -eq 1 ]] && [[ $(awk 'BEGIN {print ("'$framework_version'" >= "'2.1'")}') -eq 1 ]]; then
 		echo "ASP.NET Core" && exit 0
 	else
-		if [[ $(awk 'BEGIN {print ("'$herokuos_version'" < "'16.04'")}') ]]; then
+		if [[ $(awk 'BEGIN {print ("'$herokuos_version'" < "'16.04'")}') -eq 1 ]]; then
 			error <<-EOF
 				Ubuntu $herokuos_version is not supported by .NET Core $framework_version.
 
