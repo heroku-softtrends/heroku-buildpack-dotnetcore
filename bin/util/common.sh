@@ -89,3 +89,34 @@ export_env_dir() {
     popd >/dev/null
   fi
 }
+
+get_project_file() {
+	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
+	echo $projectfile
+}
+
+get_project_name() {
+	local projectname=""
+	local projectfile="$(get_project_file $1)"
+	if [[ $projectfile ]]; then
+		projectname=$(basename ${projectfile%.*})
+	fi
+	echo $projectname
+}
+
+get_project_version() {
+	local projectversion=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
+	echo $projectversion
+}
+
+get_netcore_version() {
+	local netcoreversion="2.2.401" # set dotnet default version
+	if [ $1 == "netcoreapp2.1" ]; then
+		netcoreversion="2.1.403"
+	elif [ $1 == "netcoreapp2.2" ]; then
+		netcoreversion="2.2.402"
+	elif [ $1 == "netcoreapp3.0" ]; then
+		netcoreversion="3.0.100"
+	fi
+	echo $netcoreversion
+}
