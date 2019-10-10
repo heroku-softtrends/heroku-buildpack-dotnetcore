@@ -249,7 +249,7 @@ check_pre_reqs() {
             echo "ldconfig is not in PATH, trying /sbin/ldconfig."
             LDCONFIG_COMMAND="/sbin/ldconfig"
         else
-            LDCONFIG_COMMAND="pkgconfig"
+            LDCONFIG_COMMAND="ldconfig"
         fi
 
         local librarypath=${LD_LIBRARY_PATH:-}
