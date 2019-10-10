@@ -17,34 +17,37 @@ function apt_install(){
 	print "Updating apt caches"
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
+	mkdir -p "$BUILD_DIR/.apt"
+	
+	local is_set_path = false
+
 	for package in "$@"; do
 		if [[ $(is_dpkg_installed $package) == 0 ]]; then
-			if [[ $package == *deb ]]; then
-				local package_name=$(basename $package .deb)
-				local package_file=$apt_cache_dir/archives/$package_name.deb
+			local package_name=$(basename $package .deb)
+			local package_file=$apt_cache_dir/archives/$package_name.deb
+			if [[ $package == *deb ]]; then			
 				print "Fetching $package"
 				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
 			else
 				print "Fetching .debs for $package"
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
+			
+			print "Installing $(basename $package_file)"
+			dpkg -x $package_file "$BUILD_DIR/.apt/"
+			is_set_path = true
 		fi
 	done
 
-	mkdir -p "$BUILD_DIR/.apt"
-
-	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
-		print "Installing $(basename $DEB)"
-		dpkg -x $DEB "$BUILD_DIR/.apt/"
-	done
-
-	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
-	export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
-	export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LIBRARY_PATH-}"
-	export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
-	export CPATH="${INCLUDE_PATH-}"
-	export CPPPATH="${INCLUDE_PATH-}"
-	echo "APT packages Installled"
+	if [[ is_set_path ]]; then
+		export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
+		export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
+		export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LIBRARY_PATH-}"
+		export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
+		export CPATH="${INCLUDE_PATH-}"
+		export CPPPATH="${INCLUDE_PATH-}"
+		echo "APT packages Installled"
+	fi
 }
 
 is_dpkg_installed() {
