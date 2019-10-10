@@ -33,10 +33,6 @@ herokuos_version="$(get_linux_platform_version)"
 print "OS: Ubuntu.$herokuos_version"
 print "Stack version: ${STACK}"
 
-# Get .net core framework version
-framework_version="$(get_framework_version $BUILD_DIR)"
-print "The current project version: ${framework_version}"
-
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [[ $herokuos_version == "18.04" ]]; then
 	apt_install libicu60 openssl1.0
@@ -45,6 +41,10 @@ elif [[ $herokuos_version == "19.04" ]]; then
 else
 	apt_install libicu55
 fi
+
+# Get .net core framework version
+framework_version="$(get_framework_version $BUILD_DIR)"
+print "The current project version: ${framework_version}"
 
 runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
 print "The dotnet sdk version: ${runtime_framework_version} to be installed"
