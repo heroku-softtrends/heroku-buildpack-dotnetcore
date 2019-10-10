@@ -89,7 +89,7 @@ get_project_name() {
 
 get_framework_version() {
 	local projectversion=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
-	echo "$(projectversion//[a-z,.]/)"
+	echo "${projectversion//[a-z,.]/ }"
 }
 
 get_netcore_version() {
