@@ -18,6 +18,7 @@ function apt_install(){
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
 	for package in "$@"; do
+		[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep libunwind)" ]
 		if [[ $package == *deb ]]; then
 			local package_name=$(basename $package .deb)
 			local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -43,4 +44,25 @@ function apt_install(){
 	export CPATH="${INCLUDE_PATH-}"
 	export CPPPATH="${INCLUDE_PATH-}"
 	echo "APT packages Installled"
+}
+
+is_dpkg_installed() {
+    if [ "$(uname)" = "Linux" ]; then
+        if [ ! -x "$(command -v ldconfig)" ]; then
+            echo "ldconfig is not in PATH, trying /sbin/ldconfig."
+            LDCONFIG_COMMAND="/sbin/ldconfig"
+        else
+            LDCONFIG_COMMAND="ldconfig"
+        fi
+
+        local librarypath=${LD_LIBRARY_PATH:-}
+        LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ }"
+	if [[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep $package)" ]]; then
+		echo 0
+	else
+		echo 1
+	fi
+    fi
+
+    return 0
 }
