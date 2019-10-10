@@ -25,7 +25,7 @@ if [[ -f "$1/$project_name.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]
 	# Get application framework verson
 	framework_version=$(get_framework_version $1)
 	
-	if  [[ decimal_compare $herokuos_version "16.04" ">=" ]] && [[ decimal_compare $framework_version "2.1" ">=" ]]; then
+	if  [[ $(awk 'BEGIN {print ("'$herokuos_version'" >= "'16.04'")}') ]] && [[ $(awk 'BEGIN {print ("'$framework_version'" >= "'2.1'")}') ]]; then
 		echo "ASP.NET Core" && exit 0
 	else
 		if [[ "$(echo $herokuos_version '<' 16.04 | bc -l)" -eq 1 ]]; then
