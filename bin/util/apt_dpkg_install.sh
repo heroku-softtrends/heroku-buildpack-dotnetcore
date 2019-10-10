@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 function apt_install(){
-	echo "Install package"
-
 	local apt_cache_dir="$CACHE_DIR/apt/cache"
 	local apt_state_dir="$CACHE_DIR/apt/state"
 
