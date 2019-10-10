@@ -98,8 +98,8 @@ function apt_install(){
     local deb="$(ls $apt_cache_dir/archives | grep $package)"
     dpkg -x $apt_cache_dir/archives/$deb "$BUILD_DIR/.apt/"
     ls -a "$BUILD_DIR/.apt/"
-    dpkg -c $apt_cache_dir/archives/$deb
-    dpkg -l $deb
+    dpkg -c $package
+    dpkg -l $package
     #ln -s $BUILD_DIR/.apt/$package-@PACKAGE_VERSION@ ${DESTDIR}/usr/local/bin/s
   done
   
