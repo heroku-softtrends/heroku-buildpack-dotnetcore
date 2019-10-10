@@ -24,11 +24,9 @@ source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/install.sh
 source "$BP_DIR/bin/util/install.sh"
 
-print "The current stack version: ${STACK}"
 print "OS: $(get_os)"
-print "CPU: $(get_cpu)"
-print "Platform: $(get_platform)"
-print "Platform: $(get_linux_platform_name)"
+print "Stack Version: $(get_linux_platform_version)"
+print "Heroku Stack Version: ${STACK}"
 
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [ $STACK == "cedar-14" ] || [ $STACK == "heroku-14" ]; then
