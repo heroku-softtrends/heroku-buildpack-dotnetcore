@@ -17,7 +17,7 @@ declare project_name
 project_name="$(get_project_name $1)"
 
 if [[ -f "$1/$project_name.csproj" && -f "$1/Startup.cs" && -f "$1/Program.cs" ]]; then
-	declare herokuos_version, framework_version
+	declare herokuos_version framework_version
 	
 	# Get OS version
 	herokuos_version=$(get_linux_platform_version)
