@@ -21,8 +21,8 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
-# shellcheck source=util/install.sh
-source "$BP_DIR/bin/util/install.sh"
+# shellcheck source=util/apt_dpkg_install.sh
+source "$BP_DIR/bin/util/apt_dpkg_install.sh" 
 
 ### Local variable declaration
 declare herokuos_version framework_version runtime_framework_version
@@ -38,7 +38,13 @@ framework_version="$(get_framework_version $BUILD_DIR)"
 print "The current project version: ${framework_version}"
 
 print "Installing prerequisites for .NET Core on Ubuntu"
-apt_install $herokuos_version $framework_version
+if [[ $herokuos_version == "18.04" ]]; then
+	apt_install llibicu60 openssl1.0
+elif [[ $herokuos_version == "19.04" ]]; then
+	apt_install libicu63 libssl1.1
+else
+	apt_install libicu55
+fi
 
 runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
 print "The dotnet sdk version: ${runtime_framework_version} to be installed"
@@ -69,7 +75,6 @@ echo 'export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HO
 echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PATH
 echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
-echo 'export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/i386-linux-gnu/pkgconfig:$HOME/.apt/usr/lib/pkgconfig"' >> $PROFILE_PATH
 
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
