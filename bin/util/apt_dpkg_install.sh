@@ -31,7 +31,7 @@ function apt_install(){
 		fi
 	done
 		
-	declare -i is_set_path=0
+	local is_set_path=0
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 	    print "Installing $(basename $DEB)"
@@ -51,7 +51,6 @@ function apt_install(){
 }
 
 is_dpkg_installed() {
-    print "$(uname)"
     if [ "$(uname)" = "Linux" ]; then
         if [ ! -x "$(command -v ldconfig)" ]; then
             echo "ldconfig is not in PATH, trying /sbin/ldconfig."
@@ -62,7 +61,7 @@ is_dpkg_installed() {
 
         local librarypath=${LD_LIBRARY_PATH:-}
         LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ }"
-	echo "$($LDCONFIG_COMMAND 2>/dev/null | grep $package)"
+	echo "$LDCONFIG_COMMAND"
 	if [[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep $package)" ]]; then
 		echo 0
 	else
