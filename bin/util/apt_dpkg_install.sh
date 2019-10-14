@@ -22,7 +22,7 @@ function apt_install(){
 	for package in "$@"; do
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
-		if [[ $is_installed == 0 ]]; then
+		if [[ is_installed == 0 ]]; then
 			is_pakage_downloaded=is_pakage_downloaded + 1
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
@@ -37,7 +37,6 @@ function apt_install(){
 	done
 	
 	print "Downloaded package: $is_pakage_downloaded"
-	declare -i is_set_path=0
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 	    print "Installing $(basename $DEB)"
