@@ -21,17 +21,19 @@ function apt_install(){
 	
 	for package in "$@"; do
 		local has_installed=0
+		local has_installed_package=""
 		
-		if [[ $package == "openssl"* ]]; then 
-			has_installed=$(is_dpkg_installed "libssl")
+		if [[ $package == "openssl"* ]]; then
+			has_installed_package="libssl"
 		elif [[ $package == "libicu"* ]]; then
-			has_installed=$(is_dpkg_installed "libicu")
+			has_installed_package="libicu"
 		elif [[ $package == "xmlstar"* ]]; then
-			has_installed=$(is_dpkg_installed "libxml")
+			has_installed_package="libxml"
 		else
-			has_installed=$(is_dpkg_installed $package)
+			has_installed_package=$package
 		fi
 		
+		has_installed=$(is_dpkg_installed $has_installed_package)
 		print "package status: $has_installed"
 
 		if [[ $has_installed == 1 ]]; then
@@ -68,7 +70,7 @@ function apt_install(){
 }
 
 is_dpkg_installed() {
-	local has_installed=0
+	local has_installed=""
 	if [ "$(uname)" = "Linux" ]; then
 		if [ ! -x "$(command -v ldconfig)" ]; then
 		    print "ldconfig is not in PATH, trying /sbin/ldconfig."
@@ -81,9 +83,9 @@ is_dpkg_installed() {
 		#print "Package path: $librarypath"
 		#echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
-			has_installed=0
+			has_installed="Unable to locate $1"
 		else
-			has_installed=1
+			has_installed="$1 has been installed"
 		fi
 	fi
 	
