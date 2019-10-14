@@ -78,7 +78,7 @@ echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
-sed -i "s/<PackageReference Include=\"Npgsql\" Version=\"*\"/<PackageReference Include=\"Npgsql\" Version=\"*\"/g" $PROJECT_FILE
+sed "s/^<PackageReference .*/<PackageReference Include=\"Npgsql\" Version=\"*\">/" $PROJECT_FILE
 cat $PROJECT_FILE
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
