@@ -36,7 +36,7 @@ function apt_install(){
 		has_installed=$(is_dpkg_installed $has_installed_package)
 		print "package status: $has_installed"
 
-		if [[ $has_installed == *"Unable to locate $has_installed_package"* ]]; then
+		#if [[ $has_installed == *"Unable to locate $has_installed_package"* ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -47,11 +47,11 @@ function apt_install(){
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
 			is_pakage_downloaded=is_pakage_downloaded+1
-		elif [[ $has_installed == *"$has_installed_package has been installed"* ]]; then
-			print "$package already has installed."
-		else
-			print "Unable to locate $has_installed_package"
-		fi
+		#elif [[ $has_installed == *"$has_installed_package has been installed"* ]]; then
+		#	print "$package already has installed."
+		#else
+		#	print "Unable to locate $has_installed_package"
+		#fi
 	done
 
 	if [[ -d $apt_cache_dir/archives ]] && [[ $(find $apt_cache_dir/archives -maxdepth 1 -name '*.deb' | wc -l) -ne 0 ]]; then
