@@ -22,7 +22,7 @@ function apt_install(){
 	for package in "$@"; do
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
-		if [[ is_installed == 0 ]]; then
+		#if [[ is_installed == 0 ]]; then
 			is_pakage_downloaded=is_pakage_downloaded + 1
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
@@ -33,7 +33,7 @@ function apt_install(){
 				print "Fetching .debs for $package"
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
-		fi
+		#fi
 	done
 	
 	print "Downloaded package: $is_pakage_downloaded"
