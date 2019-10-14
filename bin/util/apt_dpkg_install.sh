@@ -66,7 +66,6 @@ function apt_install(){
 }
 
 is_dpkg_installed() {
-	local has_installed=0
 	if [ "$(uname)" = "Linux" ]; then
 		if [ ! -x "$(command -v ldconfig)" ]; then
 		    echo "ldconfig is not in PATH, trying /sbin/ldconfig."
@@ -79,11 +78,11 @@ is_dpkg_installed() {
 		#print "Package path: $librarypath"
 		#echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
-			has_installed=0
+			return 0
 		else
-			has_installed=1
+			return 1
 		fi
 	fi
-        echo "xxx:$has_installed"
-    	return $has_installed
+	
+    	return -1
 }
