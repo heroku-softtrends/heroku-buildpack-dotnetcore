@@ -31,12 +31,12 @@ function apt_install(){
 		fi
 	done
 		
-	local is_set_path=0
+	declare -i is_set_path=0
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 	    print "Installing $(basename $DEB)"
 	    dpkg -x $DEB "$BUILD_DIR/.apt/"
-	    is_set_path = 1
+	    is_set_path=1
 	done
 	
 	if [[ is_set_path == 1 ]]; then
