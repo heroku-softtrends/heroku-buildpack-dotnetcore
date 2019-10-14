@@ -34,7 +34,7 @@ function apt_install(){
 
 		if [[ $is_installed == 1 ]]; then
 			print "$package already has installed."
-		elif [[ $is_installed == 0 ]]; then
+		else
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -81,7 +81,7 @@ is_dpkg_installed() {
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
 			has_installed=0
 		else
-			has_installed=1
+			has_installed=0
 		fi
 	fi
 	
