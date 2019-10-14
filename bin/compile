@@ -42,6 +42,9 @@ else
 	apt_install libicu55
 fi
 
+# install xml editor
+apt_install xmlstarlet
+
 # Get .net core framework version
 framework_version="$(get_framework_version $BUILD_DIR)"
 print "The .net core framework version: ${framework_version}"
