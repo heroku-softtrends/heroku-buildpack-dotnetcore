@@ -62,7 +62,7 @@ is_dpkg_installed() {
             LDCONFIG_COMMAND="ldconfig"
         fi
 
-        local librarypath="$BUILD_DIR/.apt/usr/bin:${LD_LIBRARY_PATH-}"
+        local librarypath="$HOME/.apt/usr/bin:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"
 	print "Package path: $librarypath"
 	echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $package"
 	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $package)" ]]; then
