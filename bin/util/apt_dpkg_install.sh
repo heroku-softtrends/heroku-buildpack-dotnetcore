@@ -20,6 +20,7 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
+		dpkg --print-avail $package
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
 		is_pakage_downloaded=is_pakage_downloaded+1
@@ -39,7 +40,7 @@ function apt_install(){
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 	    print "Installing $(basename $DEB)"
 	    dpkg -x $DEB "$BUILD_DIR/.apt/"
-	    dpkg --contents $DEB
+	    dpkg --print-avail $DEB
 	done
 	
 	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
