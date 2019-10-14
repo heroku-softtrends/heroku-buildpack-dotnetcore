@@ -22,7 +22,7 @@ function apt_install(){
 	for package in "$@"; do
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
-		if [[ $is_installed -eq 0 ]]; then
+		if [[ $is_installed == 0 ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
