@@ -85,5 +85,5 @@ is_dpkg_installed() {
 		fi
 	fi
 
-    	return "$has_installed"
+    	return $has_installed
 }
