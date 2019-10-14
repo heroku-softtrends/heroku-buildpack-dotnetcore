@@ -32,7 +32,7 @@ function apt_install(){
 			print "Fetching .debs for $package"
 			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 		fi
-		dpkg --print-avail $package
+		dpkg --info $package
 	done
 	
 	print "Downloaded package: $is_pakage_downloaded"
