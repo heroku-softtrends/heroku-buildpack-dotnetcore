@@ -24,11 +24,11 @@ function apt_install(){
 		local has_installed_package=""
 		
 		if [[ $package == "openssl"* ]]; then
-			has_installed_package="libssl"
+			has_installed_package="openssl"
 		elif [[ $package == "libicu"* ]]; then
 			has_installed_package="libicu"
 		elif [[ $package == "xmlstar"* ]]; then
-			has_installed_package="libxml"
+			has_installed_package="xmlstarlet"
 		else
 			has_installed_package=$package
 		fi
