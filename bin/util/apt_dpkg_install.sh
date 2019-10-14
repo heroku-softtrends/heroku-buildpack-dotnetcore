@@ -22,18 +22,16 @@ function apt_install(){
 	for package in "$@"; do
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
-		#if [[ is_installed == 0 ]]; then
-			is_pakage_downloaded=is_pakage_downloaded + 1
-			if [[ $package == *deb ]]; then
-				local package_name=$(basename $package .deb)
-				local package_file=$apt_cache_dir/archives/$package_name.deb
-				print "Fetching $package"
-				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
-			else
-				print "Fetching .debs for $package"
-				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
-			fi
-		#fi
+		is_pakage_downloaded=is_pakage_downloaded+1
+		if [[ $package == *deb ]]; then
+			local package_name=$(basename $package .deb)
+			local package_file=$apt_cache_dir/archives/$package_name.deb
+			print "Fetching $package"
+			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
+		else
+			print "Fetching .debs for $package"
+			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+		fi
 	done
 	
 	print "Downloaded package: $is_pakage_downloaded"
