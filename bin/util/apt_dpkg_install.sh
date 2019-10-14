@@ -80,7 +80,7 @@ is_dpkg_installed() {
 	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
 		echo 0
 	else
-		echo 1
+		echo 0
 	fi
     fi
 
