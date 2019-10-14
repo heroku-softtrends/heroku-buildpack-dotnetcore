@@ -16,11 +16,8 @@ function apt_install(){
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
 	mkdir -p "$BUILD_DIR/.apt"
-	
-	declare -i is_set_path=0
 
 	for package in "$@"; do
-	        print "$package: $(is_dpkg_installed $package)"
 		if [[ $(is_dpkg_installed $package) == 0 ]]; then
 			local package_name=$(basename $package .deb)
 			local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -31,15 +28,19 @@ function apt_install(){
 				print "Fetching .debs for $package"
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
-			
-			print "Installing $(basename $package_file)"
-			dpkg -x $package_file "$BUILD_DIR/.apt/"
-			is_set_path = 1
 		else
 			print "$(basename $package .deb) already has installed"
 		fi
 	done
-
+		
+	declare -i is_set_path=0
+	
+	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
+	    print "Installing $(basename $DEB)"
+	    dpkg -x $DEB "$BUILD_DIR/.apt/"
+	    is_set_path = 1
+	done
+	
 	if [[ is_set_path == 1 ]]; then
 		export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
 		export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
