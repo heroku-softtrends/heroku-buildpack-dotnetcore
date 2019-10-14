@@ -54,7 +54,7 @@ function apt_install(){
 		fi
 	done
 
-	if [[ -d $apt_cache_dir/archives ]] && [[ $('find $apt_cache_dir/archives -name '*.deb' -print | wc -l') -ne 0 ]]; then
+	if [[ -d $apt_cache_dir/archives ]] && [[ $(find $apt_cache_dir/archives -maxdepth 1 -name '*.deb' | wc -l) -ne 0 ]]; then
 		for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 			#dpkg --info $DEB
 			print "Installing $(basename $DEB)"
