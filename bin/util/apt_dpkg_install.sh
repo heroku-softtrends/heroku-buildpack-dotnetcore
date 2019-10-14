@@ -72,6 +72,7 @@ is_dpkg_installed() {
 			echo 0
 		else
 			echo 1
+		fi
 	else
 		echo 1
 	fi
