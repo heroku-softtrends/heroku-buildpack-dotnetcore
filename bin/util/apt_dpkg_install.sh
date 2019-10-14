@@ -23,10 +23,11 @@ function apt_install(){
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
 		is_pakage_downloaded=is_pakage_downloaded+1
+		local package_name=$(basename $package .deb)
+		local package_file=$apt_cache_dir/archives/$package_name.deb
 		dpkg --contents $apt_cache_dir/archives/$package_name.deb
 		if [[ $package == *deb ]]; then
-			local package_name=$(basename $package .deb)
-			local package_file=$apt_cache_dir/archives/$package_name.deb
+
 			print "Fetching $package"
 			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
 		else
