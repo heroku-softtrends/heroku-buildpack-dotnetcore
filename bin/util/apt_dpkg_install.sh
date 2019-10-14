@@ -32,6 +32,8 @@ function apt_install(){
 			is_installed=$(is_dpkg_installed $package)
 		fi
 		
+		echo "ppp:$is_installed"
+		
 		if [[ $is_installed == 0 ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
