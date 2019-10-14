@@ -31,10 +31,10 @@ function apt_install(){
 		else
 			is_installed=$(is_dpkg_installed $package)
 		fi
-		
-		echo "ppp: $is_installed == 1"
-		
-		if [[ $is_installed == 0 ]]; then
+
+		if [[ $is_installed == 1 ]]; then
+			print "$package already has installed."
+		else
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
