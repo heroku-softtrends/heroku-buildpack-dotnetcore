@@ -17,20 +17,26 @@ function apt_install(){
 
 	mkdir -p "$BUILD_DIR/.apt"
 
+	declare -i is_pakage_downloaded=0
+	
 	for package in "$@"; do
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
-		if [[ $package == *deb ]]; then
-			local package_name=$(basename $package .deb)
-			local package_file=$apt_cache_dir/archives/$package_name.deb
-			print "Fetching $package"
-			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
-		else
-			print "Fetching .debs for $package"
-			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+		if [[ $is_installed -eq 0 ]]; then
+			if [[ $package == *deb ]]; then
+				local package_name=$(basename $package .deb)
+				local package_file=$apt_cache_dir/archives/$package_name.deb
+				print "Fetching $package"
+				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
+			else
+				print "Fetching .debs for $package"
+				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+			fi
+			is_pakage_downloaded+=1
 		fi
 	done
-		
+	
+	print "Downloaded package: $is_pakage_downloaded"
 	declare -i is_set_path=0
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
@@ -60,10 +66,12 @@ is_dpkg_installed() {
         fi
 
         local librarypath=${LD_LIBRARY_PATH:-}
-        LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ } /$HOME/.apt/usr/bin"
-	echo "$LDCONFIG_COMMAND 2>/dev/null  | grep $package"
-	if [[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep $package)" ]]; then
-		echo 0
+	echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $package"
+	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $package)" ]]; then
+		if [[ -z "$($LDCONFIG_COMMAND -NXv /$HOME/.apt/usr/bin 2>/dev/null | grep $package)" ]]; then
+			echo 0
+		else
+			echo 1
 	else
 		echo 1
 	fi
