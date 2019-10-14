@@ -20,6 +20,7 @@ function apt_install(){
 	declare -i is_set_path=0
 
 	for package in "$@"; do
+	        print "$package: $(is_dpkg_installed $package)"
 		if [[ $(is_dpkg_installed $package) == 0 ]]; then
 			local package_name=$(basename $package .deb)
 			local package_file=$apt_cache_dir/archives/$package_name.deb
