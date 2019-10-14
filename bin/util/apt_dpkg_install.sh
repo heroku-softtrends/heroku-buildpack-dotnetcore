@@ -61,7 +61,7 @@ is_dpkg_installed() {
 
         local librarypath=${LD_LIBRARY_PATH:-}
         LDCONFIG_COMMAND="$LDCONFIG_COMMAND -NXv ${librarypath//:/ }"
-	echo "$LDCONFIG_COMMAND 2>/dev/null"
+	echo "$LDCONFIG_COMMAND 2>/dev/null  | grep $package"
 	if [[ -z "$($LDCONFIG_COMMAND 2>/dev/null | grep $package)" ]]; then
 		echo 0
 	else
