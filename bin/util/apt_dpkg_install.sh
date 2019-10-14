@@ -20,7 +20,7 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
-		local has_installed=0
+		local has_installed=""
 		local has_installed_package=""
 		
 		if [[ $package == "openssl"* ]]; then
@@ -34,11 +34,11 @@ function apt_install(){
 		fi
 		
 		has_installed=$(is_dpkg_installed $has_installed_package)
-		print "package status: $has_installed"
+		#print "package status: $has_installed"
 
-		if [[ $has_installed == 1 ]]; then
+		if [[ $has_installed == *"$has_installed_package has been installed"* ]]; then
 			print "$package already has installed."
-		else
+		elif [[ $has_installed == *"Unable to locate $has_installed_package"* ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -49,11 +49,11 @@ function apt_install(){
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
 			is_pakage_downloaded=is_pakage_downloaded+1
+		else
+			print "Unable to locate $has_installed_package"
 		fi
 	done
-	
-	print "Downloaded package: $is_pakage_downloaded"
-	
+
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 		#dpkg --info $DEB
 		print "Installing $(basename $DEB)"
@@ -70,7 +70,7 @@ function apt_install(){
 }
 
 is_dpkg_installed() {
-	local has_installed=""
+
 	if [ "$(uname)" = "Linux" ]; then
 		if [ ! -x "$(command -v ldconfig)" ]; then
 		    print "ldconfig is not in PATH, trying /sbin/ldconfig."
@@ -83,11 +83,11 @@ is_dpkg_installed() {
 		#print "Package path: $librarypath"
 		#echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
-			has_installed="Unable to locate $1"
+			echo "Unable to locate $1"
 		else
-			has_installed="$1 has been installed"
+			echo "$1 has been installed"
 		fi
 	fi
 	
-    	echo $has_installed
+    	return 0
 }
