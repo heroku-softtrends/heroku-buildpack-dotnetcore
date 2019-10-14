@@ -63,7 +63,7 @@ is_dpkg_installed() {
 	print "Package path: $librarypath"
 	echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $package"
 	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $package)" ]]; then
-		echo 0
+		echo 100
 	else
 		echo 1
 	fi
