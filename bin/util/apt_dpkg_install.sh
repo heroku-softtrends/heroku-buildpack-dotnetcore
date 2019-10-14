@@ -20,19 +20,21 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
-		local is_installed=0
+		local has_installed=0
 		
 		if [[ $package == "openssl"* ]]; then 
-			is_installed=$(is_dpkg_installed "libssl")
+			has_installed=$(is_dpkg_installed "libssl")
 		elif [[ $package == "libicu"* ]]; then
-			is_installed=$(is_dpkg_installed "libicu")
+			has_installed=$(is_dpkg_installed "libicu")
 		elif [[ $package == "xmlstar"* ]]; then
-			is_installed=$(is_dpkg_installed "libxml")
+			has_installed=$(is_dpkg_installed "libxml")
 		else
-			is_installed=$(is_dpkg_installed $package)
+			has_installed=$(is_dpkg_installed $package)
 		fi
+		
+		print "package status: $has_installed"
 
-		if [[ $is_installed == 1 ]]; then
+		if [[ $has_installed == 1 ]]; then
 			print "$package already has installed."
 		else
 			if [[ $package == *deb ]]; then
