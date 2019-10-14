@@ -68,7 +68,7 @@ function apt_install(){
 is_dpkg_installed() {
     if [ "$(uname)" = "Linux" ]; then
         if [ ! -x "$(command -v ldconfig)" ]; then
-            #print "ldconfig is not in PATH, trying /sbin/ldconfig."
+            echo "ldconfig is not in PATH, trying /sbin/ldconfig."
             LDCONFIG_COMMAND="/sbin/ldconfig"
         else
             LDCONFIG_COMMAND="ldconfig"
