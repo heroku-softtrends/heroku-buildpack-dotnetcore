@@ -34,7 +34,7 @@ function apt_install(){
 
 		if [[ $is_installed == 1 ]]; then
 			print "$package already has installed."
-		else
+		elif [[ $is_installed == 0 ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
