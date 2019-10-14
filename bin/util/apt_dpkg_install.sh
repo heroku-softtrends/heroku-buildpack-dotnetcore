@@ -51,9 +51,9 @@ function apt_install(){
 	print "Downloaded package: $is_pakage_downloaded"
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
-	    print "Installing $(basename $DEB)"
-	    dpkg -x $DEB "$BUILD_DIR/.apt/"
-	    dpkg --info $DEB
+		dpkg --info $DEB
+		print "Installing $(basename $DEB)"
+		dpkg -x $DEB "$BUILD_DIR/.apt/"
 	done
 	
 	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
@@ -80,7 +80,7 @@ is_dpkg_installed() {
 	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
 		echo 0
 	else
-		echo 0
+		echo 1
 	fi
     fi
 
