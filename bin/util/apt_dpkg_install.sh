@@ -20,7 +20,6 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
-		dpkg --print-avail $package
 		local is_installed=$(is_dpkg_installed $package)
 		print "$package: $is_installed"
 		is_pakage_downloaded=is_pakage_downloaded+1
