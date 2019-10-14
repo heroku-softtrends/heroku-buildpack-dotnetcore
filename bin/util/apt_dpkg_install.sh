@@ -21,23 +21,28 @@ function apt_install(){
 	
 	for package in "$@"; do
 		local is_installed
+		
 		if [[ $package == "openssl"* ]]; then 
 			is_installed=$(is_dpkg_installed "libssl")
 		elif [[ $package == "libicu"* ]]; then
 			is_installed=$(is_dpkg_installed "libicu")
+		elif [[ $package == "xmlstar"* ]]; then
+			is_installed=$(is_dpkg_installed "libxml")
 		else
 			is_installed=$(is_dpkg_installed $package)
-		fi	
-		print "$package: $is_installed"
-		is_pakage_downloaded=is_pakage_downloaded+1
-		if [[ $package == *deb ]]; then
-			local package_name=$(basename $package .deb)
-			local package_file=$apt_cache_dir/archives/$package_name.deb
-			print "Fetching $package"
-			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
-		else
-			print "Fetching .debs for $package"
-			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+		fi
+		
+		if [[ $is_installed == 0 ]]; then
+			if [[ $package == *deb ]]; then
+				local package_name=$(basename $package .deb)
+				local package_file=$apt_cache_dir/archives/$package_name.deb
+				print "Fetching $package"
+				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
+			else
+				print "Fetching .debs for $package"
+				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
+			fi
+			is_pakage_downloaded=is_pakage_downloaded+1
 		fi
 	done
 	
@@ -67,7 +72,7 @@ is_dpkg_installed() {
             LDCONFIG_COMMAND="ldconfig"
         fi
 
-        local librarypath="$HOME/.apt/usr/bin:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"
+        local librarypath="$HOME/.apt/usr/bin:${LD_LIBRARY_PATH//$BUILD_DIR/$HOME-}"
 	print "Package path: $librarypath"
 	echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 	if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
