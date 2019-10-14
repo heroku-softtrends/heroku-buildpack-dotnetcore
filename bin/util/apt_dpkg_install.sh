@@ -84,6 +84,6 @@ is_dpkg_installed() {
 			has_installed=1
 		fi
 	fi
-
+        echo "xxx:$has_installed"
     	return $has_installed
 }
