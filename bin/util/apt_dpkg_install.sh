@@ -20,7 +20,7 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
-		local is_installed
+		local is_installed=0
 		
 		if [[ $package == "openssl"* ]]; then 
 			is_installed=$(is_dpkg_installed "libssl")
@@ -51,7 +51,7 @@ function apt_install(){
 	print "Downloaded package: $is_pakage_downloaded"
 	
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
-		dpkg --info $DEB
+		#dpkg --info $DEB
 		print "Installing $(basename $DEB)"
 		dpkg -x $DEB "$BUILD_DIR/.apt/"
 	done
@@ -66,6 +66,7 @@ function apt_install(){
 }
 
 is_dpkg_installed() {
+	local has_installed=0
 	if [ "$(uname)" = "Linux" ]; then
 		if [ ! -x "$(command -v ldconfig)" ]; then
 		    echo "ldconfig is not in PATH, trying /sbin/ldconfig."
@@ -78,11 +79,11 @@ is_dpkg_installed() {
 		#print "Package path: $librarypath"
 		#echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
-			return 0
+			has_installed=0
 		else
-			return 1
+			has_installed=1
 		fi
 	fi
 	
-    	return -1
+    	return $?
 }
