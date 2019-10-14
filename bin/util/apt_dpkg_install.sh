@@ -32,6 +32,7 @@ function apt_install(){
 			print "Fetching .debs for $package"
 			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 		fi
+		dpkg --print-avail $package
 	done
 	
 	print "Downloaded package: $is_pakage_downloaded"
@@ -39,7 +40,6 @@ function apt_install(){
 	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 	    print "Installing $(basename $DEB)"
 	    dpkg -x $DEB "$BUILD_DIR/.apt/"
-	    dpkg --print-avail $DEB
 	done
 	
 	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
