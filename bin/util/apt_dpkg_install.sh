@@ -18,18 +18,16 @@ function apt_install(){
 	mkdir -p "$BUILD_DIR/.apt"
 
 	for package in "$@"; do
-		if [[ $(is_dpkg_installed $package) == 0 ]]; then
+		local is_installed=$(is_dpkg_installed $package)
+		print "$package: $is_installed"
+		if [[ $package == *deb ]]; then
 			local package_name=$(basename $package .deb)
 			local package_file=$apt_cache_dir/archives/$package_name.deb
-			if [[ $package == *deb ]]; then			
-				print "Fetching $package"
-				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
-			else
-				print "Fetching .debs for $package"
-				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
-			fi
+			print "Fetching $package"
+			curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
 		else
-			print "$(basename $package .deb) already has installed"
+			print "Fetching .debs for $package"
+			apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 		fi
 	done
 		
