@@ -54,11 +54,13 @@ function apt_install(){
 		fi
 	done
 
-	for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
-		#dpkg --info $DEB
-		print "Installing $(basename $DEB)"
-		dpkg -x $DEB "$BUILD_DIR/.apt/"
-	done
+	if [[ -d /app/tmp/cache/apt/cache/archives ]]; then
+		for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
+			#dpkg --info $DEB
+			print "Installing $(basename $DEB)"
+			dpkg -x $DEB "$BUILD_DIR/.apt/"
+		done
+	fi
 	
 	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
 	export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
