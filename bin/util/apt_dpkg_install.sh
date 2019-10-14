@@ -20,10 +20,10 @@ function apt_install(){
 	declare -i is_pakage_downloaded=0
 	
 	for package in "$@"; do
-		local is_installed=0
+		local is_installed
 		if [[ $package == "openssl"* ]]; then 
 			is_installed=$(is_dpkg_installed "libssl")
-		else if [[ $package == "libicu"* ]]; then
+		elif [[ $package == "libicu"* ]]; then
 			is_installed=$(is_dpkg_installed "libicu")
 		else
 			is_installed=$(is_dpkg_installed $package)
