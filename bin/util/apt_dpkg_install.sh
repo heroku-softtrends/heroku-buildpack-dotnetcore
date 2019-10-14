@@ -32,7 +32,7 @@ function apt_install(){
 			is_installed=$(is_dpkg_installed $package)
 		fi
 		
-		echo "ppp:$is_installed"
+		echo "ppp: $is_installed == 0"
 		
 		if [[ $is_installed == 0 ]]; then
 			if [[ $package == *deb ]]; then
