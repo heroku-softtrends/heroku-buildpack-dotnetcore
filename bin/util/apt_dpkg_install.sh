@@ -88,7 +88,7 @@ is_dpkg_installed() {
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
 			echo "Unable to locate $1"
 		else
-			echo "$1 has been installed"
+			echo "$1 was installed"
 		fi
 	fi
 	
