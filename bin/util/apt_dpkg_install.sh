@@ -14,14 +14,6 @@ function apt_install(){
 
 	print "Updating apt caches"
 	apt-get  --allow-unauthenticated $apt_options update | indent
-	
-	print "list build dir"
-	ls -a $BUILD_DIR
-	
-	print "list home dir"
-	ls -a $HOME/tmp
-	ls -a $HOME/vendor
-	ls -a $HOME/views
 
 	if [ ! -d "$BUILD_DIR/.apt" ]; then
 		mkdir -p "$BUILD_DIR/.apt"
@@ -43,7 +35,7 @@ function apt_install(){
 		fi
 		
 		local has_installed=$(is_dpkg_installed $has_installed_package)
-		if [[ $has_installed == *"Unable to locate $has_installed_package"* ]]; then
+		#if [[ $has_installed == *"Unable to locate $has_installed_package"* ]]; then
 			if [[ $package == *deb ]]; then
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
@@ -54,11 +46,11 @@ function apt_install(){
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
 			is_pakage_downloaded=is_pakage_downloaded+1
-		elif [[ $has_installed == *"$has_installed_package has installed"* ]]; then
-			print "$package has installed."
-		else
-			print "Unable to locate $has_installed_package"
-		fi
+		#elif [[ $has_installed == *"$has_installed_package has installed"* ]]; then
+		#	print "$package has installed."
+		#else
+		#	print "Unable to locate $has_installed_package"
+		#fi
 	done
 
 	if [[ -d $apt_cache_dir/archives ]] && [[ $(find $apt_cache_dir/archives -maxdepth 1 -name '*.deb' | wc -l) -ne 0 ]]; then
@@ -89,14 +81,12 @@ is_dpkg_installed() {
 		fi
 
 		local librarypath="$BUILD_DIR/.apt/usr/bin:${LD_LIBRARY_PATH-}"
-		librarypath=$(string_replace "$librarypath" "$BUILD_DIR" "$HOME")
-		#print "Package path: $librarypath"
-		echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
+		#librarypath=$(string_replace "$librarypath" "$BUILD_DIR" "$HOME")
+		#echo "$LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null  | grep $1"
 		if [[ -z "$($LDCONFIG_COMMAND -NXv ${librarypath//:/ } 2>/dev/null | grep $1)" ]]; then
 			echo "Unable to locate $1"
 		else
-			#echo "$1 has installed"
-			echo "Unable to locate $1"
+			echo "$1 has installed"
 		fi
 	fi
 	
