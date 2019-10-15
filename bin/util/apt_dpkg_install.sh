@@ -15,7 +15,10 @@ function apt_install(){
 	print "Updating apt caches"
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
-	mkdir -p "$BUILD_DIR/.apt"
+	if [ ! -d "$BUILD_DIR/.apt" ]; then
+		mkdir -p "$BUILD_DIR/.apt"
+		cp $HOME/.apt/* $BUILD_DIR/.apt/
+	fi
 
 	declare -i is_pakage_downloaded=0
 	
