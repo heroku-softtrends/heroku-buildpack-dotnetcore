@@ -24,6 +24,8 @@ source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/apt_dpkg_install.sh
 source "$BP_DIR/bin/util/apt_dpkg_install.sh" 
 
+export_env_dir "$ENV_DIR"
+
 ### Local variable declaration
 declare herokuos_version framework_version runtime_framework_version
 
@@ -32,9 +34,6 @@ herokuos_version="$(get_linux_platform_version)"
 
 print "OS: Ubuntu $herokuos_version"
 print "Stack version: ${STACK}"
-
-# install xml editor
-apt_install xmlstarlet
 
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [[ $herokuos_version == "18.04" ]]; then
@@ -60,7 +59,10 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 $BP_DIR/bin/util/dotnet-install.sh --channel $framework_version --version $runtime_framework_version --install-dir $BUILD_DIR/.dotnet
 
 # Add symbolic link for dotnet
-ln -s ${BUILD_DIR}/.dotnet $HOME
+if [[ $BUILD_DIR != '/app' ]]; then
+	# Subsequent buildpacks can still invoke it
+	ln -s ${BUILD_DIR}/.dotnet $HOME
+fi
 
 # Add dotnet runtime path to environment variable that is available to access dotnet command
 export PATH="$PATH:$HOME/.dotnet"
@@ -90,10 +92,12 @@ PROJECT_NAME="$(get_project_name $BUILD_DIR)"
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-#cd $BUILD_DIR
-find "$BUILD_DIR/" -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
+print "build dir: $BUILD_DIR"
+print "base dir: $BASE_DIR"
+cd $BUILD_DIR
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
+web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='https://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
 EOT
