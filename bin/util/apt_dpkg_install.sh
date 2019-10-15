@@ -19,7 +19,9 @@ function apt_install(){
 	ls -a $BUILD_DIR
 	
 	print "list home dir"
-	ls -a $HOME
+	ls -a $HOME/temp
+	ls -a $HOME/vendor
+	ls -a $HOME/views
 
 	if [ ! -d "$BUILD_DIR/.apt" ]; then
 		mkdir -p "$BUILD_DIR/.apt"
