@@ -17,7 +17,9 @@ function apt_install(){
 
 	if [ ! -d "$BUILD_DIR/.apt" ]; then
 		mkdir -p "$BUILD_DIR/.apt"
-		cp $HOME/.apt/* $BUILD_DIR/.apt/
+		if [ -d "$HOME/.apt" ]; then
+			cp $HOME/.apt/* $BUILD_DIR/.apt/
+		fi
 	fi
 
 	declare -i is_pakage_downloaded=0
