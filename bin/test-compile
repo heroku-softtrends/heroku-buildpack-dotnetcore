@@ -15,7 +15,9 @@ BP_DIR=$(cd "$(dirname "${0:-}")" || exit; cd ..; pwd)
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
 # shellcheck source=util/apt_dpkg_install.sh
-source "$BP_DIR/bin/util/apt_dpkg_install.sh" 
+source "$BP_DIR/bin/util/apt_dpkg_install.sh"
+
+print "Test starts"
 
 ### Set up test dotnet environment
 
@@ -26,3 +28,5 @@ export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-production}
 ### Compile the app
 
 "$BP_DIR/bin/compile" "$1" "$2" "$3"
+
+print "Test ended"
