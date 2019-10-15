@@ -19,7 +19,7 @@ function apt_install(){
 	ls -a $BUILD_DIR
 	
 	print "list home dir"
-	ls -a $HOME/temp
+	ls -a $HOME/tmp
 	ls -a $HOME/vendor
 	ls -a $HOME/views
 
