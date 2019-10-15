@@ -73,11 +73,31 @@ export_env_dir() {
 	fi
 }
 
+# args:
+# input - $1
+remove_trailing_slash() {
+    local input="${1:-}"
+    echo "${input%/}"
+    return 0
+}
+
+# args:
+# input - $1
+remove_beginning_slash() {
+    local input="${1:-}"
+    echo "${input#/}"
+    return 0
+}
+
+# args:
+# input - $1
 get_project_file() {
 	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
 	echo $projectfile
 }
 
+# args:
+# input - $1
 get_project_name() {
 	local project_name=""
 	local project_file="$(get_project_file $1)"
@@ -87,6 +107,8 @@ get_project_name() {
 	echo $project_name
 }
 
+# args:
+# input - $1
 get_framework_version() {
 	local target_framework=$(grep -oPm1 "(?<=<TargetFramework>)[^<]+" $1/*.csproj)
 	if [[ $target_framework =~ ";" ]]; then
@@ -96,6 +118,8 @@ get_framework_version() {
 	fi
 }
 
+# args:
+# input - $1
 get_runtime_framework_version() {
 	local runtime_framework_version=$(grep -oPm1 "(?<=<RuntimeFrameworkVersion>)[^<]+" $1/*.csproj)
 	if [[ ${#runtime_framework_version} -eq 0 ]]; then
@@ -105,18 +129,8 @@ get_runtime_framework_version() {
 	fi
 }
 
-get_netcore_version() {
-	local netcoreversion="2.2.401" # set dotnet default version
-	if [ $1 == "netcoreapp2.1" ]; then
-		netcoreversion="2.1.403"
-	elif [ $1 == "netcoreapp2.2" ]; then
-		netcoreversion="2.2.402"
-	elif [ $1 == "netcoreapp3.0" ]; then
-		netcoreversion="3.0.100"
-	fi
-	echo $netcoreversion
-}
-
+# args:
+# input - $1, $2
 decimal_compare() {
    awk -v n1="$1" -v n2="$2" 'BEGIN {printf "%s " "$3" " %s\n", n1, n2}'
 }
