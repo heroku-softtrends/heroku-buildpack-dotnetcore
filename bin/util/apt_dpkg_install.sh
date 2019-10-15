@@ -14,13 +14,16 @@ function apt_install(){
 
 	print "Updating apt caches"
 	apt-get  --allow-unauthenticated $apt_options update | indent
+	
+	print "list build dir"
+	ls -a $BUILD_DIR
+	
+	print "list home dir"
+	ls -a $HOME
 
 	if [ ! -d "$BUILD_DIR/.apt" ]; then
 		mkdir -p "$BUILD_DIR/.apt"
 	fi
-	
-	print "list build dir"
-	ls -a $BUILD_DIR
 
 	declare -i is_pakage_downloaded=0
 	
