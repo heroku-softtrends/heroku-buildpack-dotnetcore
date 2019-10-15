@@ -98,5 +98,5 @@ find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_mo
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='https://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
+web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
 EOT
