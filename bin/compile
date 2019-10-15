@@ -79,17 +79,19 @@ echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PA
 echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 
+# Get project file from build directory
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
+
+# Get project name from project file
 PROJECT_NAME="$(get_project_name $BUILD_DIR)"
-$BUILD_DIR/.apt/usr/bin/xmlstarlet ed --inplace -u '/Project/ItemGroup/PackageReference[@Include="Npgsql"]/@Version' -v "*" $PROJECT_FILE
-cat $PROJECT_FILE
+
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$PROJECT_NAME --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-cd $BUILD_DIR
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
+#cd $BUILD_DIR
+find "$BUILD_DIR/" -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $PROJECT_NAME  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
