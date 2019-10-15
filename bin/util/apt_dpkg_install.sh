@@ -15,11 +15,8 @@ function apt_install(){
 	print "Updating apt caches"
 	apt-get  --allow-unauthenticated $apt_options update | indent
 
-	if [ ! -d "$BUILD_DIR/.apt" ]; then
-		mkdir -p "$BUILD_DIR/.apt"
-		if [ -d "$HOME/.apt" ]; then
-			cp $HOME/.apt/* $BUILD_DIR/.apt/
-		fi
+	if [ ! -d "$HOME/.apt" ]; then
+		mkdir -p "$HOME/.apt"
 	fi
 
 	declare -i is_pakage_downloaded=0
@@ -60,14 +57,14 @@ function apt_install(){
 		for DEB in $(ls -1 $apt_cache_dir/archives/*.deb); do
 			#dpkg --info $DEB
 			print "Installing $(basename $DEB)"
-			dpkg -x $DEB "$BUILD_DIR/.apt/"
+			dpkg -x $DEB "$HOME/.apt/"
 		done
 	fi
 	
-	export PATH="$PATH:$BUILD_DIR/.apt/usr/bin"
-	export LD_LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LD_LIBRARY_PATH-}"
-	export LIBRARY_PATH="$BUILD_DIR/.apt/usr/lib/x86_64-linux-gnu:$BUILD_DIR/.apt/usr/lib/i386-linux-gnu:$BUILD_DIR/.apt/usr/lib:${LIBRARY_PATH-}"
-	export INCLUDE_PATH="$BUILD_DIR/.apt/usr/include:${INCLUDE_PATH-}"
+	export PATH="$PATH:$HOME/.apt/usr/bin"
+	export LD_LIBRARY_PATH="$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib:${LD_LIBRARY_PATH-}"
+	export LIBRARY_PATH="$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib:${LIBRARY_PATH-}"
+	export INCLUDE_PATH="$HOME/.apt/usr/include:${INCLUDE_PATH-}"
 	export CPATH="${INCLUDE_PATH-}"
 	export CPPPATH="${INCLUDE_PATH-}"
 	echo "Environment variables has exported"
