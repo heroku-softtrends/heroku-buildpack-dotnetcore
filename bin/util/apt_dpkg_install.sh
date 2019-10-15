@@ -19,12 +19,8 @@ function apt_install(){
 		mkdir -p "$BUILD_DIR/.apt"
 	fi
 	
-	print "list cache dir"
-	ls -a $CACHE_DIR/apt
-	print "list base dir"
-	ls -a $BASE_DIR
 	print "list build dir"
-	ls -a BUILD_DIR
+	ls -a $BUILD_DIR
 
 	declare -i is_pakage_downloaded=0
 	
