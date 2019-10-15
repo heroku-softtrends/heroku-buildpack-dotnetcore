@@ -74,6 +74,12 @@ export_env_dir() {
 }
 
 # args:
+# input - $1,$2
+string_replace {
+    echo "${1/\*/$2}"
+}
+
+# args:
 # input - $1
 remove_trailing_slash() {
     local input="${1:-}"
