@@ -75,7 +75,7 @@ export_env_dir() {
 
 # args:
 # input - $1,$2
-string_replace {
+string_replace() {
     echo "${1/\*/$2}"
 }
 
