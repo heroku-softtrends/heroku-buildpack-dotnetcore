@@ -76,7 +76,9 @@ export_env_dir() {
 # args:
 # input - $1,$2
 string_replace() {
-    echo "${1/\*/$2}"
+    #DOC: "${string/match/replace}"
+    string=$1
+    echo "${string/$2/$3}"
 }
 
 # args:
