@@ -68,8 +68,8 @@ fi
 # Add dotnet runtime path to environment variable that is available to access dotnet command
 export PATH="$PATH:$HOME/.dotnet"
 
-# Check dotnet version
-dotnet --info
+# List installed dotnet runtimes
+dotnet --list-runtimes
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
@@ -102,5 +102,5 @@ cat << EOT >> ${BUILD_DIR}/Procfile
 web: cd \$HOME/$APP_ASSEMBLY_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY_NAME.dll"
 EOT
 
-# Export vars
+# Export APP_ASSEMBLY to profile script
 echo "export APP_ASSEMBLY=`grep -o '\".*\"' /$BUILD_DIR/Procfile | perl -pe 's/.\///g' | perl -pe 's/.dll//g'`" >> $PROFILE_PATH
