@@ -100,6 +100,3 @@ find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_mo
 cat << EOT >> ${BUILD_DIR}/Procfile
 web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PROJECT_NAME.dll"
 EOT
-
-## Export app assembly to Subsequent scripts can still invoke it
-echo "export NETCORE_APP_ASSEMBLY=\"$PROJECT_NAME\"" >> "$BP_DIR/export"
