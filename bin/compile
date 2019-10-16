@@ -102,4 +102,4 @@ web: cd \$HOME/$PROJECT_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$PRO
 EOT
 
 ## Export app assembly to Subsequent scripts can still invoke it
-export NETCORE_APP_ASSEMBLY=$PROJECT_NAME
+echo "export NETCORE_APP_ASSEMBLY=\"$PROJECT_NAME\"" >> "$BP_DIR/export"
