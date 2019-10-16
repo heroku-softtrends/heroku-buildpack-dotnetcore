@@ -28,6 +28,7 @@ export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 
 "$BP_DIR/bin/compile" "$1" "$2" "$3"
 
+print "App assembly: $NETCORE_APP_ASSEMBLY"
 export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-staging}
 
 print "Test ended"
