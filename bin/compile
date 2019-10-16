@@ -81,6 +81,7 @@ echo 'export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HO
 echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PATH
 echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
+echo 'export DOTNET_CLI_TELEMETRY_OPTOUT=1' >> $PROFILE_PATH
 
 # Get project file from build directory
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
