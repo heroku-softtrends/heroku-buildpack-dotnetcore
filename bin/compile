@@ -102,4 +102,4 @@ web: cd \$HOME/$APP_ASSEMBLY_NAME && ASPNETCORE_URLS='http://+:\$PORT' dotnet ".
 EOT
 
 # Export vars
-echo 'export APP_ASSEMBLY=`$APP_ASSEMBLY_NAME`' >> $PROFILE_PATH
+echo "export APP_ASSEMBLY=`grep -o '\".*\"' /$BUILD_DIR/Procfile | perl -pe 's/.\///g' | perl -pe 's/.dll//g'`" >> $PROFILE_PATH
