@@ -74,6 +74,9 @@ dotnet --info
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 
+export NETCORE_APP_ASSEMBLY="$(get_project_name $BUILD_DIR)";
+print "App assembly: $NETCORE_APP_ASSEMBLY"
+
 # Export vars
 echo 'export PATH="$PATH:$HOME/.dotnet:$HOME/.apt/usr/bin"' >> $PROFILE_PATH
 echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"' >> $PROFILE_PATH
@@ -81,7 +84,7 @@ echo 'export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HO
 echo 'export INCLUDE_PATH="$INCLUDE_PATH:$HOME/.apt/usr/include"' >> $PROFILE_PATH
 echo 'export CPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
-echo 'export NETCORE_APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"' >> $PROFILE_PATH
+echo 'export NETCORE_APP_ASSEMBLY' >> $PROFILE_PATH
 
 # Get project file from build directory
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
