@@ -68,8 +68,8 @@ fi
 # Add dotnet runtime path to environment variable that is available to access dotnet command
 export PATH="$PATH:$HOME/.dotnet"
 
-# List installed dotnet runtimes
-dotnet --list-runtimes
+## List installed dotnet runtimes
+#dotnet --list-runtimes
 
 PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
