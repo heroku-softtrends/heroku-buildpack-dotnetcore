@@ -13,10 +13,10 @@ Heroku Buildpacks [How to use](https://devcenter.heroku.com/articles/buildpacks#
 <br/>
             
 # Example
-In order to see the buildpack in action, you can click on the button below which will deploy a sample ASP.Net MVC application to heroku and you can see the build and deployment logs as the application gets deployed for you. This application was developed using Visual Studio 2017. 
+In order to see the buildpack in action, you can click on the button below which will deploy a sample ASP.Net MVC application to heroku and you can see the build and deployment logs as the application gets deployed for you. This application was developed using Visual Studio 2019. 
 <br/>
 <br/>
-<a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/dotnetcore2.main.sample/tree/master">
+<a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/sample3.0">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
