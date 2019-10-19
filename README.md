@@ -20,4 +20,4 @@ In order to see the buildpack in action, you can click on the button below which
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
-You can also download the source code for the Sample Application by [Clicking here](https://github.com/heroku-softtrends/dotnetcore2.main.sample/tree/master)
+You can also download the source code for the Sample Application by [Clicking here](https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/sample3.0)
