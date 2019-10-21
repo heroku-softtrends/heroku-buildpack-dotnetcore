@@ -9,5 +9,6 @@
     {
       "url": "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore.git"
     }
-  ]
+  ],
+  "stack": "heroku-18"
 }
