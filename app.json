@@ -1,0 +1,14 @@
+{
+
+  "name": "ASP.NET Core 2.1 & Postgres",
+  "description": "ASP.NET Core 2.1 with Heroku Postgres Sample Code, with Heroku Button for deployment",
+  "website": "http://www.softtrends.com/",
+  "repository": "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/sample2.1",
+  "logo": "https://avatars2.githubusercontent.com/u/20908829?v=3&s=150",
+  "keywords": ["aspnet core", "aspnet core mvc"],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore.git"
+    }
+  ]
+}
