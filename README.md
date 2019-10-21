@@ -12,7 +12,7 @@ You've created a new ASP.NET Core MVC project. [Learn what's new](https://go.mic
 You can deploy this ASP.Net Core MVC website on Heroku server by clicking the button below
 <br/>
 <br/>
-<a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/Sample2.1">
+<a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/sample2.1">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
