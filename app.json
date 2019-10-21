@@ -12,6 +12,7 @@
           "url": "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore"
         }
       ],
+      "repository": "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore/tree/buildpack-test",
       "scripts": {
         "test-setup": "dotnet --version & dotnet \"/app/${APP_ASSEMBLY}/${APP_ASSEMBLY}.dll\" 1>/dev/null 2>&1 & echo \"${APP_ASSEMBLY} app has started\" & sleep 5",
         "test": "ps aux | grep $(echo ${APP_ASSEMBLY}).dll & ps -ef | grep dotnet | grep -v grep | awk '{print $2}' | xargs kill"
