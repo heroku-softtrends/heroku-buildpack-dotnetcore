@@ -105,4 +105,4 @@ web: cd \$HOME/$APP_ASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP
 EOT
 
 ### Export all env vars to subsequent scripts
-source_envfile "$BUILD_DIR/.profile.d/dotnetcore.sh"
+. .$BUILD_DIR/.profile.d/dotnetcore.sh
