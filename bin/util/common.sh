@@ -140,9 +140,7 @@ get_runtime_framework_version() {
 # args:
 # input - $1
 is_postgres_used() {
-	#grep -Pio 'Include="Npgsql".*Version="\K[^"]*' $1/*.csproj
-	local npgsql_version=$(grep -q Include="Npgsql" $1/*.csproj; [ $? -eq 0 ] && echo "yes" || echo "no")
-	echo "${npgsql_version}"
+	echo '$(grep -q "Npgsql" $1/*.csproj && echo "yes" || echo "no")'
 }
 
 # args:
