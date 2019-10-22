@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
+BUILD_DIR=$1
+BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+
+### Load dependencies
+
+# shellcheck source=util/common.sh
+source "$BP_DIR/bin/util/common.sh"
+
+print "Set default process type in release"
+
+
 cat <<EOF
 ---
 addons: []
