@@ -3,8 +3,8 @@
 
 ### Configure directories
 
-BUILD_DIR=${1:-}
-BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+export BUILD_DIR=$1
+BP_DIR=$(cd $(dirname $0)/..; pwd)
 
 ### Load dependencies
 
@@ -12,7 +12,7 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 source "$BP_DIR/bin/util/common.sh"
 
 ### Export env vars
-source_envfile $BUILD_DIR/.profile.d/dotnetcore.sh
+source_envfile "$BUILD_DIR/.profile.d/dotnetcore.sh"
 
 cat <<EOF
 ---
