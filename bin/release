@@ -23,7 +23,7 @@ addons:
 EOF
 fi
 
-if [ -f $BUILD_DIR/Procfile ]; then
+if [[ ! -f $BUILD_DIR/Procfile ]]; then
 cat <<EOF
 default_process_types:
 EOF
