@@ -140,7 +140,7 @@ get_runtime_framework_version() {
 # args:
 # input - $1
 is_postgres_used() {
-	echo '$(grep -q "Npgsql" $1/*.csproj && echo "yes" || echo "no")'
+	echo "$(grep -q "Npgsql" $1/*.csproj && echo 'yes' || echo 'no')"
 }
 
 # args:
