@@ -103,4 +103,4 @@ find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_mo
 #EOT
 
 # Export APP_ASSEMBLY to profile script
-echo "export APP_ASSEMBLY=`grep -o '\".*\"' /$BUILD_DIR/Procfile | perl -pe 's/.\///g' | perl -pe 's/.dll//g'`" >> $PROFILE_PATH
+#echo "export APP_ASSEMBLY=`grep -o '\".*\"' /$BUILD_DIR/Procfile | perl -pe 's/.\///g' | perl -pe 's/.dll//g'`" >> $PROFILE_PATH
