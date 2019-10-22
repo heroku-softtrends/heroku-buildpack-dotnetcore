@@ -138,6 +138,18 @@ get_runtime_framework_version() {
 }
 
 # args:
+# input - $1
+is_postgres_used() {
+	#grep -Pio 'Include="Npgsql".*Version="\K[^"]*' $1/*.csproj
+	local npgsql_version=$(grep -i 'Include="Npgsql" Version=".*\"' $1/*.csproj | awk -F' ' '{print $5}' | sed -E 's/Version=\"(.*)\"/\1/')
+	if [[ ${#npgsql_version} -eq 0 ]]; then
+		echo "no"
+	else
+		echo "yes"
+	fi
+}
+
+# args:
 # input - $1, $2
 decimal_compare() {
    awk -v n1="$1" -v n2="$2" 'BEGIN {printf "%s " "$3" " %s\n", n1, n2}'
