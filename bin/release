@@ -10,7 +10,9 @@ BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
-source .$BUILD_DIR/.profile.d/dotnetcore.sh
+
+### Export env vars
+source_envfile $BUILD_DIR/.profile.d/dotnetcore.sh
 
 cat <<EOF
 ---
