@@ -19,7 +19,7 @@ cat <<EOF
 config_vars:
 EOF
 
-if [[ $IS_POSTGRES_USED == 'yes' ]]; then
+if [[ $IS_POSTGRES_USED == "yes" ]]; then
 cat <<EOF
 addons:
   - heroku-postgresql:hobby-dev
