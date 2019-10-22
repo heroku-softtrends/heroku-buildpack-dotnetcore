@@ -103,3 +103,6 @@ find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_mo
 cat << EOT >> ${BUILD_DIR}/Procfile1
 web: cd \$HOME/$APP_ASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
 EOT
+
+### Export all env vars to subsequent scripts
+source_envfile "$BUILD_DIR/.profile.d/dotnetcore.sh"
