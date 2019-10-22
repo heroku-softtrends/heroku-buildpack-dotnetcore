@@ -3,7 +3,5 @@
 
 cat <<EOF
 ---
-addons: 
- - heroku-postgresql:hobby-dev
-
+addons: []
 EOF
