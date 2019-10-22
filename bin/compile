@@ -89,6 +89,9 @@ PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 # Get app assembly name from project file
 APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
 
+echo "export APP_ASSEMBLY=`$(echo ${APP_ASSEMBLY})`" >> $PROFILE_PATH
+cat $PROFILE_PATH
+
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$APP_ASSEMBLY --configuration Release --runtime linux-x64
