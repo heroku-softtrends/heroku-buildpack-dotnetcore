@@ -98,9 +98,9 @@ cd $BUILD_DIR
 find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $APP_ASSEMBLY  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
-cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$APP_ASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
-EOT
+#cat << EOT >> ${BUILD_DIR}/Procfile
+#web: cd \$HOME/$APP_ASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
+#EOT
 
 # Export APP_ASSEMBLY to profile script
 echo "export APP_ASSEMBLY=`grep -o '\".*\"' /$BUILD_DIR/Procfile | perl -pe 's/.\///g' | perl -pe 's/.dll//g'`" >> $PROFILE_PATH
