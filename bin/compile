@@ -91,7 +91,6 @@ PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
 echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
 
-
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$APP_ASSEMBLY --configuration Release --runtime linux-x64
@@ -101,6 +100,6 @@ cd $BUILD_DIR
 find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $APP_ASSEMBLY  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
-cat << EOT >> ${BUILD_DIR}/Procfile1
+cat << EOT >> ${BUILD_DIR}/Procfile
 web: cd \$HOME/$APP_ASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
 EOT
