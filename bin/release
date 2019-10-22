@@ -19,12 +19,12 @@ cat <<EOF
 config_vars:
 EOF
 
-if [[ $IS_POSTGRES_USED == "yes" ]]; then
-cat <<EOF
-addons:
-  - heroku-postgresql:hobby-dev
-EOF
-fi
+#if [[ $IS_POSTGRES_USED == "yes" ]]; then
+#cat <<EOF
+#addons:
+#  - heroku-postgresql:hobby-dev
+#EOF
+#fi
 
 if [[ ! -f $BUILD_DIR/Procfile ]]; then
 cat <<EOF
