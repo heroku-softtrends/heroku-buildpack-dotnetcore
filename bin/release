@@ -11,6 +11,9 @@ BP_DIR=$(cd $(dirname $0)/..; pwd)
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
 
+### Export all env vars here
+. $BUILD_DIR/.profile.d/dotnetcore.sh
+
 cat <<EOF
 ---
 config_vars:
