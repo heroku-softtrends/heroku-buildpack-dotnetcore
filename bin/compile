@@ -89,7 +89,7 @@ PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 # Get app assembly name from project file
 APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
 
-echo "export APP_ASSEMBLY=`$(echo ${APP_ASSEMBLY})`" >> $PROFILE_PATH
+echo "export APP_ASSEMBLY=`$(echo \"${APP_ASSEMBLY}\")`" >> $PROFILE_PATH
 cat $PROFILE_PATH
 
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
