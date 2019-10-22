@@ -144,6 +144,10 @@ is_postgres_used() {
 }
 
 # args:
+# input - $1
+source_envfile() { export $(cat $1 | sed -e /^$/d -e /^#/d | xargs); }
+
+# args:
 # input - $1, $2
 decimal_compare() {
    awk -v n1="$1" -v n2="$2" 'BEGIN {printf "%s " "$3" " %s\n", n1, n2}'
