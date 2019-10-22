@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 # bin/release <build-dir>
 
-BUILD_DIR=$1
-BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+export BUILD_DIR=$1
 
-### Load dependencies
+BP_DIR=$(cd $(dirname $0)/..; pwd)
 
 # shellcheck source=util/common.sh
 source "$BP_DIR/bin/util/common.sh"
 
-print "Set default process type in release"
-
-
-cat <<EOF
+if [ -f $BUILD_DIR/Procfile ]; then
+  cat <<EOF
 ---
-addons: []
+config_vars:
+default_process_types:
 EOF
+
+  cd $BUILD_DIR/$APP_ASSEMBLY
+  echo "  web: ASPNETCORE_URLS='http://+:\$PORT' dotnet \"./$APP_ASSEMBLY.dll\""
+fi
