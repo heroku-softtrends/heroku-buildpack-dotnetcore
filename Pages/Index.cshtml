@@ -1,10 +1,17 @@
-﻿@page
+@page
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
+    <h1 class="display-4">Welcome to .Net Core Sample Application</h1>
+    <p>This application was developed using Visual Studio 2019 and the project files include the necessary references for latest version of .Net Core</p>
+    <p>References to latest version of Heroku Postgres driver is also included if you want to use a Heroku Postgres add-on with the application you build.</p>
+    <p>You can <a href="https://visualstudio.microsoft.com/downloads/">download Visual Studio 2019</a>.</p>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>Learn about <a href="https://devcenter.heroku.com/articles/heroku-postgresql">using Heroku Postgres</a>.</p>
+</div>
+<div class="text-center">
+    <p> This application is deployed on <a href= "https://www.heroku.com/"> Heroku</a> using <a href= "https://github.com/heroku-softtrends/heroku-buildpack-dotnetcore">.Net Core buildpack for Heroku</a>
 </div>
