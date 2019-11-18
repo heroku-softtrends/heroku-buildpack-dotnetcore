@@ -1,0 +1,280 @@
+﻿@using Microsoft.AspNetCore.Http;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Postgres Sample Application</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+    <meta name="MobileOptimized" content="320">
+
+
+    <script src="~/scripts/angularjs/angular.js"></script>
+    <script src="~/scripts/angularjs/angular-route.js"></script>
+    <script src="~/assets/plugins/jquery-1.10.2.min.js"></script>
+    <script src="~/assets/plugins/jquery-migrate-1.2.1.min.js"></script>
+
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet" type="text/css">
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/assets/plugins/uniform/css/uniform.default.css" rel="stylesheet" />
+    <link href="~/assets/plugins/select2/select2.css" rel="stylesheet">
+    <link href="~/assets/plugins/select2/select2-metronic.css" rel="stylesheet">
+    <link href="~/assets/plugins/gritter/css/jquery.gritter.css" rel="stylesheet" />
+    <link href="~/assets/plugins/jqvmap/jqvmap/jqvmap.css" rel="stylesheet" />
+    <link href="~/assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.css" rel="stylesheet" />
+    <link href="~/assets/css/style-metronic.css" rel="stylesheet" />
+    <link href="~/assets/css/style.css" rel="stylesheet" />
+    <link href="~/assets/css/style-responsive.css" rel="stylesheet" />
+    <link href="~/assets/css/plugins.css" rel="stylesheet" />
+    <link href="~/assets/css/pages/tasks.css" rel="stylesheet" />
+    <link href="~/assets/css/themes/default.css" rel="stylesheet" id="style_color" />
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/plugins/bootstrap-datetimepicker/css/datetimepicker.css">
+    <link href="~/assets/css/custom.css" rel="stylesheet" />
+    @*<link rel="shortcut icon" href="~/assets/img/workers-in-motion-favicon.ico" />*@
+    <link href="~/assets/plugins/data-tables/DT_bootstrap.css" rel="stylesheet">
+    <link href="~/assets/fonts/font.css" rel="stylesheet" />
+
+    <style>
+        ::-ms-clear {
+            display: none;
+        }
+
+        .masknew {
+            display: block;
+            height: 100%;
+            left: 0;
+            opacity: .8;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        #divmasknew img {
+            position: relative;
+            top: 45%;
+            left: 50%;
+        }
+
+        #divmasknew span {
+            position: relative;
+            top: 50%;
+            left: 45%;
+        }
+    </style>
+
+</head>
+<body class="page-header-fixed" ng-app="postgresSample">
+    @await Html.PartialAsync("~/Views/Shared/_header.cshtml")
+    <div class="clearfix">
+    </div>
+    <div class="page-container">
+        <div id="newdiv" class="page-sidebar navbar-collapse collapse" style="z-index:200;">
+            @*@{Html.RenderAction("Menu", "User");}*@
+            <ul class='page-sidebar-menu'>
+
+
+                <li>
+                    <div class='sidebar-toggler hidden-phone'></div>
+                </li>
+                <li style="padding-top:20px"></li>
+
+                <li class=''>
+                    <a href=''><i class='icon-user'></i><span class='title'>Property</span><span class='arrow'></span></a>
+                    <ul class='sub-menu' style='display: none;'>
+                        <li class=''><a href='/Property/Index'>List Property</a></li>
+
+                    </ul>
+                </li>
+
+
+            </ul>
+        </div>
+        <div class="page-content-wrapper" data-ng-view>
+            <div class="page-content" style="z-index:0;">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px;
+        top: 0px; width: 100%; height: 100%; background-color: #E4E0E0; z-index: 30001;
+        opacity: .8; filter: alpha(opacity=70);display:none">
+        <p style="position: absolute; top: 48%; left: 48%; font-weight:bold; color: #F24D4D;text-align:center;">
+            <span id="loadTxt">Loading...</span><br />
+        </p>
+    </div>
+    <iframe id="myIframe" src="~/images/ajax-loader.gif" title="Loading..." scrolling="no" frameborder="0" style="width: 50%; position: fixed; z-index: 30002; height: 50%;left:50%; top: 50%; display: none; "></iframe>
+
+
+    @await Html.PartialAsync("~/Views/Shared/_Footer.cshtml")
+    <script src="~/assets/plugins/jquery-ui/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/plugins/bootstrap-hover-dropdown/twitter-bootstrap-hover-dropdown.min.js"></script>
+    <script src="~/assets/plugins/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/plugins/jquery.blockui.min.js"></script>
+    <script src="~/assets/plugins/jquery.cookie.min.js"></script>
+    <script src="~/assets/plugins/uniform/jquery.uniform.js"></script>
+    <script src="~/assets/plugins/select2/select2.min.js"></script>
+    <script src="~/assets/plugins/data-tables/jquery.dataTables.js"></script>
+    <script src="~/assets/plugins/data-tables/DT_bootstrap.js"></script>
+    <!-- END CORE PLUGINS -->
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+
+    <script src="~/assets/plugins/jqvmap/jqvmap/data/jquery.vmap.sampledata.js"></script>
+    <script src="~/assets/plugins/flot/jquery.flot.js"></script>
+    <script src="~/assets/plugins/flot/jquery.flot.resize.js"></script>
+    <script src="~/assets/plugins/flot/jquery.flot.pie.min.js"></script>
+    <script src="~/assets/plugins/jquery.pulsate.min.js"></script>
+    <script src="~/assets/plugins/bootstrap-daterangepicker/moment.min.js"></script>
+    <script src="~/assets/plugins/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <script src="~/assets/plugins/gritter/js/jquery.gritter.js"></script>
+    <!-- IMPORTANT! fullcalendar depends on jquery-ui-1.10.3.custom.min.js for drag & drop support -->
+    <script src="~/assets/plugins/fullcalendar/fullcalendar/fullcalendar.min.js"></script>
+    <script src="~/assets/plugins/jquery-easy-pie-chart/jquery.easy-pie-chart.js"></script>
+    <script src="~/assets/plugins/jquery.sparkline.min.js"></script>
+
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN PAGE LEVEL SCRIPTS -->
+    <script type="text/javascript" src="~/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/assets/scripts/components-pickers.js"></script>
+    <script src="~/assets/scripts/index.js"></script>
+    <script src="~/assets/scripts/tasks.js"></script>
+    @*<script src="~/Scripts/ModalPopups.js"></script>*@
+    <script src="~/assets/scripts/app.js"></script>
+
+    <script src="~/assets/scripts/charts.js"></script>
+    <script src="~/assets/scripts/table-editable.js"></script>
+    <script src="~/assets/scripts/table-advanced.js"></script>
+
+    <script src="~/scripts/routeConfig.js"></script>
+    <script src="~/scripts/psaService.js"></script>
+    <script src="~/scripts/propertyController.js"></script>
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>
+
+
+<script type="text/javascript">
+    function setBusyLoaderVisibility(isShow) {
+
+
+        $("#myIframe").attr('src', '/images/ajax-loader.gif');
+        document.getElementById("myIframe").style.display = isShow ? "block" : "none";
+        document.getElementById("divLoading").style.display = isShow ? "block" : "none";
+    }
+
+
+
+
+    jQuery(document).ready(function () {
+
+        $('ul.sub-menu a').on('click', function () {
+            $('#loadTxt').html("Loading " + $(this).html() + " ...");
+            setBusyLoaderVisibility(true);
+        });
+
+        $('ul.dropdown-menu a').on('click', function () {
+            var urlarray = location.pathname.split('/');
+            if (urlarray.length > 0)
+                url = urlarray[2];
+
+            if ($(this).html().toLowerCase().indexOf("log") < 0) {
+                if (urlarray[2].toLowerCase() == "dashboard") {
+                    $('#loadTxt').html("Loading " + url + " ...");
+                }
+                else {
+                    $('#loadTxt').html("Loading " + urlarray[1] + " ...");
+                }
+                setBusyLoaderVisibility(true);
+
+            }
+
+        });
+
+        $("div[class='ranges'] ul li[class !='active']").on('click', function () {
+            console.log($("div[class='ranges'] ul li").html());
+            var urlarray = location.pathname.split('/');
+            if (urlarray.length > 0)
+                url = urlarray[2];
+
+            if ($(this).html().toLowerCase().indexOf("log") < 0) {
+                if (urlarray[2].toLowerCase() == "dashboard") {
+                    $('#loadTxt').html("Loading " + url + " ...");
+                }
+                else {
+                    $('#loadTxt').html("Loading " + urlarray[1] + " ...");
+                }
+                setBusyLoaderVisibility(true);
+
+            }
+
+        });
+
+
+        App.init(); // initlayout and core plugins
+        Index.init();
+        //Index.initJQVMAP(); // init index page's custom scripts
+        Index.initCalendar(); // init index page's custom scripts
+        // Index.initCharts(); // init index page's custom scripts
+        Index.initChat();
+        // Index.initPieCharts();
+        Index.initMiniCharts();
+        Index.initDashboardDaterange();
+        //Index.initIntro();
+        Tasks.initDashboardWidget();
+        setTimeout(function () {
+            if ($("#sample_1_info") && $("#sample_1_info").html()) {
+
+                if ($(".pagination").css("visibility") == "visible") {
+                    setBusyLoaderVisibility(false);
+                }
+            }
+            else if ($("#sample_editable_1_info") && $("#sample_editable_1_info").html()) {
+                if ($(".pagination").css("visibility") == "visible") {
+                    setBusyLoaderVisibility(false);
+                }
+            }
+            else if ($("#sample_editable_2_info") && $("#sample_editable_2_info").html()) {
+                if ($(".pagination").css("visibility") == "visible") {
+                    setBusyLoaderVisibility(false);
+                }
+            }
+            else if ($("#sample_editable_3_info") && $("#sample_editable_3_info").html()) {
+                if ($(".pagination").css("visibility") == "visible") {
+                    setBusyLoaderVisibility(false);
+                }
+            }
+            else {
+                setBusyLoaderVisibility(false);
+            }
+        }, 0);
+
+    });
+
+    function deleteconfirm() {
+        if (confirm("Are you sure you want to delete?"))
+            return true;
+        else
+            return false;
+    }
+    function subscribeconfirm() {
+        if (confirm("Do you want to Subscribe User ?"))
+            return true;
+        else
+            return false;
+    }
+    function Unsubscribeconfirm() {
+        if (confirm("Do you want to UnSubscribe User ?"))
+            return true;
+        else
+            return false;
+    }
+</script>

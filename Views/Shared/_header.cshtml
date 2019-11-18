@@ -1,0 +1,69 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Postgres</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <meta name="MobileOptimized" content="320">
+    <style type="text/css">
+        #ulwelcome :hover {
+            cursor: default;
+        }
+    </style>
+   
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#slide').mouseout(function () {
+                $('#box').stop(false, true).show(1).delay(1500).slideUp();
+            });
+
+            $('#slide').mouseover(function () {
+                $('#box').stop(false, true).hide(1).delay(250).slideDown();
+            });
+        });
+    </script>
+</head>
+<body>
+    @using Microsoft.AspNetCore.Http;
+    <div class="header navbar navbar-inverse navbar-fixed-top" style="height:50px;vertical-align:middle;padding-top:5px;">
+        <!-- BEGIN TOP NAVIGATION BAR -->
+        <div class="header-inner">
+            <h6 class="page-title" style="color:white">ASP.Net Core MVC Application with Postgres Database</h6>
+            <!-- BEGIN LOGO -->
+            @*<a class="navbar-brand" href="~/User/Login">*@
+                @*<img src="~/assets/img/workers-in-motion.png" alt="logo" class="img-responsive" />*@
+            @*</a>*@
+            <!-- END LOGO -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            @*<a href="javascript:;" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <img src="~/assets/img/menu-toggler.png" alt="" />
+            </a>*@
+            <!-- END RESPONSIVE MENU TOGGLER -->
+            <!-- BEGIN TOP NAVIGATION MENU -->
+            <ul class="nav navbar-nav pull-left" id="ulwelcome">
+                <!-- BEGIN NOTIFICATION DROPDOWN -->
+                <li>
+                    <a href="#">
+
+                        @*<i class="icon-star"></i>*@
+                        <span class="title" id="lblGreeting"></span>
+
+                    </a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <!-- BEGIN NOTIFICATION DROPDOWN -->
+
+                <li class="dropdown user" id="headerlogout">
+                   
+                </li>
+                <!-- END USER LOGIN DROPDOWN -->
+            </ul>
+            <!-- END TOP NAVIGATION MENU -->
+        </div>
+        <!-- END TOP NAVIGATION BAR -->
+    </div>
+    <!-- END HEADER -->
+</body>
+</html>
