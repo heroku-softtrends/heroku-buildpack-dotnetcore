@@ -44,7 +44,7 @@ elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
 elif [[ $herokuos_version == "20.04" ]]; then
         print "libicu65 libssl1.1 package(s) to be installed"
-	apt_install libicu65 libssl1.1
+	apt_install libicu66 libssl1.1
 else
         print "libicu55 package to be installed"
 	apt_install libicu55
