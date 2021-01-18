@@ -40,9 +40,11 @@ function apt_install(){
 				local package_name=$(basename $package .deb)
 				local package_file=$apt_cache_dir/archives/$package_name.deb
 				print "Fetching $package"
+				print "dpkg $package_file"
 				curl -s -L -z $package_file -o $package_file $package 2>&1 | indent
 			else
 				print "Fetching .debs for $package"
+				print "dpkg $package_file"
 				apt-get $apt_options -y --allow-downgrades --allow-remove-essential --allow-change-held-packages -d install --reinstall $package | indent
 			fi
 			is_pakage_downloaded=is_pakage_downloaded+1
