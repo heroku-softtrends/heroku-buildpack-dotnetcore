@@ -38,11 +38,15 @@ print "Stack version: ${STACK}"
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [[ $herokuos_version == "18.04" ]]; then
 	apt_install libicu60 openssl1.0
+	print "libicu60 libssl1.1 package(s) to be installed"
 elif [[ $herokuos_version == "19.04" ]]; then
+        print "libicu63 libssl1.1 package(s) to be installed"
 	apt_install libicu63 libssl1.1
 elif [[ $herokuos_version == "20.04" ]]; then
+        print "libicu65 libssl1.1 package(s) to be installed"
 	apt_install libicu65 libssl1.1
 else
+        print "libicu55 package to be installed"
 	apt_install libicu55
 fi
 
