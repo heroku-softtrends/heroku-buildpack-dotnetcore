@@ -41,7 +41,7 @@ if [[ $herokuos_version == "18.04" ]]; then
 elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
 else
-	apt_install libicu55
+	apt_install libicu66
 fi
 
 # Get .net core framework version
