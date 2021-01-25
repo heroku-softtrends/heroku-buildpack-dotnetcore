@@ -40,6 +40,8 @@ if [[ $herokuos_version == "18.04" ]]; then
 	apt_install libicu60 openssl1.0
 elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
+elif [ $STACK == "heroku-20" ]; then
+   	apt_install libicu66 openssl1.0
 else
 	apt_install libicu55
 fi
@@ -96,8 +98,9 @@ echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
 dotnet publish $PROJECT_FILE --output $BUILD_DIR/$APP_ASSEMBLY --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-cd $BUILD_DIR
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $APP_ASSEMBLY  -exec rm -rv {} \; > /dev/null 2>&1;
+cd $BUILD_DIR && find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name node_modules ! -name $APP_ASSEMBLY  -exec rm -rv {} \; > /dev/null 2>&1;
+
+cd ${BUILD_DIR}/node_modules && find -maxdepth 1 ! -name html-pdf ! -name phantomjs-prebuilt -exec rm -rv {} \;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
