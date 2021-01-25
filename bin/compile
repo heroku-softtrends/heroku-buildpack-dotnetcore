@@ -40,7 +40,7 @@ if [[ $herokuos_version == "18.04" ]]; then
 	apt_install libicu60 openssl1.0
 elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
-elif [ $STACK == "heroku-20" ]; then
+elif [[ $STACK == "heroku-20" ]]; then
    	apt_install libicu66 openssl1.0
 else
 	apt_install libicu55
