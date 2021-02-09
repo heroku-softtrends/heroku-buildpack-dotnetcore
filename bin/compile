@@ -94,14 +94,16 @@ APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
 echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
 
 cd $BUILD_DIR
+RELEASE_DIR="${APP_ASSEMBLY}_Release"
+
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
-dotnet publish $PROJECT_FILE --output $BUILD_DIR/heroku_output --configuration Release --runtime linux-x64
+dotnet publish $PROJECT_FILE --output $BUILD_DIR/$RELEASE_DIR --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name heroku_output  -exec rm -rv {} \; > /dev/null 2>&1;
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name $RELEASE_DIR  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/heroku_output && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
+web: cd \$HOME/$RELEASE_DIR && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
 EOT
