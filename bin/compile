@@ -90,17 +90,18 @@ echo "export DOTNET_CLI_TELEMETRY_OPTOUT=1" >> $PROFILE_PATH
 PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 
 # Get app assembly name from project file
-APPASSEMBLY="$(get_project_name $BUILD_DIR)"
+APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
 echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
+BUILD_TARGET_PATH="$BUILD_DIR/$APP_ASSEMBLY"
 
 # https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
 # dotnet publish [<PROJECT>]
-dotnet publish $PROJECT_FILE --output $BUILD_DIR/$APPASSEMBLY --configuration Release --runtime linux-x64
+dotnet publish $PROJECT_FILE --output $BUILD_DIR/$BUILD_TARGET_PATH --configuration Release --runtime linux-x64
 
 # Remove src files in production machine
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name $APPASSEMBLY  -exec rm -rv {} \; > /dev/null 2>&1;
+find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name $BUILD_TARGET_PATH  -exec rm -rv {} \; > /dev/null 2>&1;
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$APPASSEMBLY && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
+web: cd \$HOME/$BUILD_TARGET_PATH && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
 EOT
