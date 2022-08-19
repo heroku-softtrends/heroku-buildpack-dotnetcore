@@ -49,7 +49,7 @@ elif [[ $herokuos_version == "19.04" ]]; then
 elif [[ $herokuos_version == "20.04" ]]; then
    	apt_install libicu66 libssl1.1
 elif [[ $herokuos_version == "22.04" ]] && [[ $framework_version == "3.1" ]]; then
-	apt_install libicu70 libssl1.1
+	apt_install libicu70 libssl3
 fi
 
 runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
