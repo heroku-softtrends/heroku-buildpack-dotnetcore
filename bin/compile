@@ -35,10 +35,6 @@ herokuos_version="$(get_linux_platform_version)"
 print "OS: Ubuntu $herokuos_version"
 print "Stack version: ${STACK}"
 
-# Get .net core framework version
-framework_version="$(get_framework_version $BUILD_DIR)"
-print "The .net core framework version: ${framework_version}"
-
 print "Installing prerequisites for .NET Core on Ubuntu"
 if [[ $herokuos_version == "16.04" ]]; then
 	apt_install libicu55 openssl1.0
@@ -48,18 +44,39 @@ elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
 elif [[ $herokuos_version == "20.04" ]]; then
    	apt_install libicu66 libssl1.1
+elif [[ $herokuos_version == "22.04" ]]; then
+   	apt_install apt-transport-https libicu70 libssl3 libunwind8 libgssapi-krb5-2 libc6 liblttng-ust1
 fi
-
-runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
-print "The dotnet sdk version: ${runtime_framework_version} to be installed"
 
 # Skip TELEMETRY_OPTOUT on production environment
 export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=${DOTNET_SKIP_FIRST_TIME_EXPERIENCE:-1}
 export DOTNET_CLI_TELEMETRY_OPTOUT=${DOTNET_CLI_TELEMETRY_OPTOUT:-1}
 export ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-production}
 
-# dotnet installation
-$BP_DIR/bin/util/dotnet-install.sh --channel $framework_version --version $runtime_framework_version --install-dir $BUILD_DIR/.dotnet
+while IFS='' read -r -d '' filename; do
+	declare project_dir
+	
+	# Get project directory path
+	project_dir=$(dirname $filename);
+	print "The project directory path: ${project_dir}"
+	
+	# Get netcore framework version
+	framework_version="$(get_framework_version $project_dir)"
+	print "The netcore framework version: ${framework_version}"
+
+	# Get dotnet runtime version
+	runtime_framework_version="$(get_specific_version $BUILD_DIR)"
+	if [[ -z $runtime_framework_version ]]; then	
+		runtime_framework_version="$(get_runtime_framework_version $project_dir)"		
+	fi
+	print "The dotnet runtime version: ${runtime_framework_version} to be installed"
+
+	# dotnet installation
+	$BP_DIR/bin/util/dotnet-install.sh --architecture x64 --channel $framework_version --version $runtime_framework_version --install-dir $BUILD_DIR/.dotnet
+	
+	break
+
+done < <(find $BUILD_DIR -maxdepth 2 -name "*.csproj" -print0)
 
 # Add symbolic link for dotnet
 if [[ $BUILD_DIR != '/app' ]]; then
@@ -77,6 +94,8 @@ PROFILE_PATH="$BUILD_DIR/.profile.d/dotnetcore.sh"
 mkdir -p $(dirname $PROFILE_PATH)
 
 # Export vars
+echo 'export DOTNET_ROOT=$HOME/.dotnet' >> $PROFILE_PATH
+echo 'export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools' >> $PROFILE_PATH
 echo 'export PATH="$PATH:$HOME/.dotnet:$HOME/.apt/usr/bin"' >> $PROFILE_PATH
 echo 'export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"' >> $PROFILE_PATH
 echo 'export LIBRARY_PATH="$LIBRARY_PATH:$HOME/.apt/usr/lib/x86_64-linux-gnu:$HOME/.apt/usr/lib/i386-linux-gnu:$HOME/.apt/usr/lib"' >> $PROFILE_PATH
@@ -86,24 +105,54 @@ echo 'export CPPPATH="$INCLUDE_PATH"' >> $PROFILE_PATH
 echo "export DOTNET_CLI_TELEMETRY_OPTOUT=1" >> $PROFILE_PATH
 #echo "export IS_POSTGRES_USED=\"$(is_postgres_used $BUILD_DIR)\"" >> $PROFILE_PATH
 
-# Get project file from build directory
-PROJECT_FILE="$(get_project_file $BUILD_DIR)"
+# Get solution file from build directory
+SOLUTION_FILE="$(get_project_sln_file $BUILD_DIR)"
 
-# Get app assembly name from project file
-APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
-echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
+#print "The nuget packages to be cleared"
+#dotnet nuget locals all --clear
+dotnet --list-runtimes
 
-cd $BUILD_DIR
-RELEASE_DIR="${APP_ASSEMBLY}_Release"
+if [[ ${#SOLUTION_FILE} -eq 0 ]]; then
+	# Get project file from build directory
+	PROJECT_FILE="$(get_project_file $BUILD_DIR)"
 
-# https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
-# dotnet publish [<PROJECT>]
-dotnet publish $PROJECT_FILE --output $BUILD_DIR/$RELEASE_DIR --configuration Release --runtime linux-x64
+	# Get app assembly name from project file
+	APP_ASSEMBLY="$(get_project_name $BUILD_DIR)"
+	print "The assembly name: ${APP_ASSEMBLY}"
+	echo "export APP_ASSEMBLY=\"$(get_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
+
+	RELEASE_DIR="${APP_ASSEMBLY}_Release"
+	echo "export RELEASE_DIR=\"${APP_ASSEMBLY}_Release\"" >> $PROFILE_PATH
+	cd $BUILD_DIR
+	
+	# https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
+	# dotnet publish [<PROJECT>]
+	dotnet publish $PROJECT_FILE --output $BUILD_DIR/$RELEASE_DIR --configuration Release --runtime linux-x64 --no-self-contained	
+else
+	# Get app assembly name from project file
+	APP_ASSEMBLY="$(get_start_project_name $BUILD_DIR)"
+	print "The assembly name: ${APP_ASSEMBLY}"
+	echo "export APP_ASSEMBLY=\"$(get_start_project_name $BUILD_DIR)\"" >> $PROFILE_PATH
+	
+	# Get solution name from build directory
+	SOLUTION_NAME="$(get_project_sln_name $BUILD_DIR)"
+	print "The solution name: ${SOLUTION_NAME}"
+	
+	RELEASE_DIR="${SOLUTION_NAME}_Release"
+	echo "export RELEASE_DIR=\"${SOLUTION_NAME}_Release\"" >> $PROFILE_PATH
+	cd $BUILD_DIR
+	
+	# https://docs.microsoft.com/en-us/dotnet/core/tools/dotnet-publish?tabs=netcore21
+	# dotnet publish [<Solution>]
+	dotnet publish $SOLUTION_FILE --output $BUILD_DIR/$RELEASE_DIR --configuration Release --runtime linux-x64 --no-self-contained
+fi
 
 # Remove src files in production machine
-find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name $RELEASE_DIR  -exec rm -rv {} \; > /dev/null 2>&1;
+find -maxdepth 1 ! -name Procfile ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku ! -name node_modules ! -name $RELEASE_DIR  -exec rm -rv {} \; > /dev/null 2>&1;
 
+if [[ ! -z "$APP_ASSEMBLY" ]]; then
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$RELEASE_DIR && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
+	web: cd \$HOME/$RELEASE_DIR && dotnet "./$APP_ASSEMBLY.dll" --urls http://+:\$PORT
 EOT
+fi

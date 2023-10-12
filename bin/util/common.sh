@@ -99,8 +99,26 @@ remove_beginning_slash() {
 
 # args:
 # input - $1
+get_project_sln_file() {
+	local solutionfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.sln; x=`dirname "$x"`; done)
+	echo $solutionfile
+}
+
+# args:
+# input - $1
+get_project_sln_name() {
+	local solution_name=""
+	local solutionfile="$(get_project_sln_file $1)"
+	if [[ $solutionfile ]]; then
+		solution_name=$(basename ${solutionfile%.*})
+	fi
+	echo $solution_name
+}
+
+# args:
+# input - $1
 get_project_file() {
-	local projectfile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
+	local projectfile=$(x=$(dirname $(find $1 -maxdepth 2 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 1 -name *.csproj; x=`dirname "$x"`; done)
 	echo $projectfile
 }
 
@@ -113,6 +131,28 @@ get_project_name() {
 		project_name=$(basename ${project_file%.*})
 	fi
 	echo $project_name
+}
+
+# args:
+# input - $1
+get_start_project_name() {
+	local project_name=""
+	local launchSettingsFile=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 3 -name launchSettings.json; x=`dirname "$x"`; done)
+	if [[ $launchSettingsFile ]]; then
+		project_name=$(basename $(dirname $(dirname ${launchSettingsFile%.*})))
+	fi
+	echo $project_name
+}
+
+# args:
+# input - $1
+get_specific_version() {
+	local sVersion=""
+	local productVersion=$(x=$(dirname $(find $1 -maxdepth 1 -type f | head -1)); while [[ "$x" =~ $1 ]] ; do find "$x" -maxdepth 3 -name productVersion.txt; x=`dirname "$x"`; done)
+	if [[ $productVersion ]]; then
+		sVersion=`cat $productVersion`
+	fi
+	echo $sVersion
 }
 
 # args:
@@ -132,6 +172,8 @@ get_runtime_framework_version() {
 	local runtime_framework_version=$(grep -oPm1 "(?<=<RuntimeFrameworkVersion>)[^<]+" $1/*.csproj)
 	if [[ ${#runtime_framework_version} -eq 0 ]]; then
 		echo "Latest"
+	elif [[ $runtime_framework_version == *"rc"* ]] || [[ $runtime_framework_version == *"preview"* ]]; then
+		echo "${runtime_framework_version}"
 	else
 		echo "${runtime_framework_version//[a-z]/}"
 	fi
