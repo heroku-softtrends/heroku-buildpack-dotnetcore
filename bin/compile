@@ -105,5 +105,5 @@ find -maxdepth 1 ! -name .profile.d ! -name .apt ! -name .dotnet ! -name .heroku
 
 # Create procfile and Add process type to that 
 cat << EOT >> ${BUILD_DIR}/Procfile
-web: cd \$HOME/$RELEASE_DIR && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll"
+web: cd \$HOME/$RELEASE_DIR && ASPNETCORE_URLS='http://+:\$PORT' dotnet "./$APP_ASSEMBLY.dll" --urls http://+:\$PORT
 EOT
