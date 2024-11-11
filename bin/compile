@@ -48,6 +48,8 @@ elif [[ $herokuos_version == "19.04" ]]; then
 	apt_install libicu63 libssl1.1
 elif [[ $herokuos_version == "20.04" ]]; then
    	apt_install libicu66 libssl1.1
+elif [[ $herokuos_version == "24.04" ]]; then
+   	apt_install apt-transport-https ca-certificates libc6 libgcc-s1 libicu74 liblttng-ust1 libssl3 libstdc++6 libunwind8 zlib1g
 fi
 
 runtime_framework_version="$(get_runtime_framework_version $BUILD_DIR)"
